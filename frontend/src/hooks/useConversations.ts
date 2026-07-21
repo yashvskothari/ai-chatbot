@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { v4 as uuid } from "uuid";
 
 import type { Conversation } from "../types/conversation";
 import {
@@ -25,7 +26,7 @@ const [activeConversationId, setActiveConversationId] =
   // Create new conversation
   const createConversation = () => {
     const newConversation: Conversation = {
-      id: crypto.randomUUID(),
+      id: uuid(),
       title: "New Chat",
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),

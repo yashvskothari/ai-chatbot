@@ -20,6 +20,8 @@ const {
   createConversation,
   selectConversation,
   updateMessages,
+  deleteConversation,
+  renameConversation
 } = useConversations();
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -109,6 +111,8 @@ const {
   activeConversationId={activeConversationId}
   onSelect={selectConversation}
   onNewChat={createConversation}
+  onRename={renameConversation}
+  onDelete={deleteConversation}
 />
 
         <div className="flex flex-col flex-1">
