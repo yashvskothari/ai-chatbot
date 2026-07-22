@@ -1,15 +1,26 @@
+import { Menu } from "lucide-react";
+
 import logo from "../../assets/logo.png";
 import ThemeToggle from "../ui/ThemeToggle";
 
-const Navbar = () => {
+interface NavbarProps {
+  onMenuClick: () => void;
+}
+
+const Navbar = ({ onMenuClick }: NavbarProps) => {
   return (
     <header
       className="
         sticky
         top-0
         z-50
-        h-20
-        px-8
+
+        h-16
+        lg:h-18
+
+        px-4
+        sm:px-6
+        lg:px-8
 
         border-b
         border-(--border-color)
@@ -26,13 +37,64 @@ const Navbar = () => {
 
         {/* Left */}
 
-        <div className="flex items-center gap-4">
+        <div
+          className="
+            flex
+            items-center
+
+            gap-2
+            sm:gap-3
+            lg:gap-4
+          "
+        >
+
+          {/* Mobile Hamburger */}
+
+          <button
+            onClick={onMenuClick}
+            className="
+              flex
+              md:hidden
+
+              h-10
+              w-10
+
+              items-center
+              justify-center
+
+              rounded-xl
+
+              border
+              border-(--border-color)
+
+              bg-(--bg-card)
+
+              text-(--text-primary)
+
+              transition-all
+              duration-300
+
+              hover:bg-blue-500/10
+            "
+          >
+            <Menu size={22} />
+          </button>
+
+          {/* Logo */}
 
           <div
             className="
               flex
-              h-11
-              w-11
+
+              h-9
+              w-9
+
+              sm:h-10
+              sm:w-10
+
+              lg:h-11
+              lg:w-11
+
               items-center
               justify-center
 
@@ -50,15 +112,29 @@ const Navbar = () => {
             <img
               src={logo}
               alt="Flux AI"
-              className="h-20 w-20 scale-120 object-contain"
+              className="
+                h-16
+                w-16
+
+                sm:h-18
+                sm:w-18
+
+                lg:h-20
+                lg:w-20
+
+                object-contain
+                scale-110
+              "
             />
           </div>
 
           <div>
-
             <h1
               className="
                 text-lg
+                sm:text-xl
+                lg:text-2xl
+
                 font-semibold
                 tracking-wide
 
@@ -72,7 +148,12 @@ const Navbar = () => {
 
             <p
               className="
-                text-sm
+                hidden
+                sm:block
+
+                text-xs
+                lg:text-sm
+
                 text-(--text-primary)
 
                 transition-colors
@@ -80,17 +161,26 @@ const Navbar = () => {
             >
               Intelligent AI Workspace
             </p>
-
           </div>
-
         </div>
 
         {/* Right */}
 
-        <div className="flex items-center gap-3">
+        <div
+          className="
+            flex
+            items-center
 
+            gap-2
+            sm:gap-3
+            lg:gap-4
+          "
+        >
           <div
             className="
+              hidden
+              md:flex
+
               rounded-full
 
               border
@@ -98,7 +188,9 @@ const Navbar = () => {
 
               bg-(--bg-card)
 
-              px-4
+              px-3
+              lg:px-4
+
               py-2
 
               text-sm
@@ -112,10 +204,10 @@ const Navbar = () => {
             React • FastAPI • Groq
           </div>
 
-          <ThemeToggle />
-
+          <div className="shrink-0">
+            <ThemeToggle />
+          </div>
         </div>
-
       </div>
     </header>
   );

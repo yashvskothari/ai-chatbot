@@ -18,13 +18,29 @@ const ChatMessage = ({ message }: Props) => {
     <div
       className={`flex ${
         isUser ? "justify-end" : "justify-start"
-      }`}
+      }
+      
+    animate-in
+    fade-in
+    slide-in-from-bottom-2
+    duration-300
+      `}
     >
       <div
         className={`
           flex
-          max-w-[78%]
-          gap-3
+          w-fit
+
+max-w-[92%]
+
+sm:max-w-[85%]
+
+lg:max-w-3xl
+
+xl:max-w-4xl
+          gap-2
+
+sm:gap-3
           ${isUser ? "flex-row-reverse" : ""}
         `}
       >
@@ -35,8 +51,11 @@ const ChatMessage = ({ message }: Props) => {
             mt-1
 
             flex
-            h-10
-            w-10
+            h-9
+w-9
+
+sm:h-10
+sm:w-10
 
             shrink-0
 
@@ -57,9 +76,15 @@ const ChatMessage = ({ message }: Props) => {
           `}
         >
           {isUser ? (
-            <User size={18} />
+            <User
+  size={16}
+  className="sm:size-4.5"
+/>
           ) : (
-            <Bot size={18} />
+            <Bot
+  size={16}
+  className="sm:size-4.5"
+/>
           )}
         </div>
 
@@ -69,15 +94,25 @@ const ChatMessage = ({ message }: Props) => {
 
 <Card
   className={`
-    rounded-[26px]
-    text-lg
-    px-5
-    py-4
+    rounded-2xl
 
-    leading-8
+lg:rounded-[26px]
+    text-lg
+    px-4
+
+sm:px-5
+
+lg:px-6
+    py-3
+
+lg:py-4
+
+    leading-7
+
+lg:leading-8
 
     whitespace-pre-wrap
-    wrap-break-word
+    overflow-hidden
 
     border
 
@@ -96,19 +131,19 @@ const ChatMessage = ({ message }: Props) => {
 
           text-white
 
-          shadow-sm
+          shadow-md
           shadow-blue-500/20
         `
         : `
           border-var(--border-color)
 
           bg-linear-to-br
-          from-sky-50
-          via-cyan-50
-          to-blue-100
+         from-white
+via-sky-50
+to-blue-50
 
           dark:from-slate-800
-          dark:via-slate-800
+          dark:via-slate-900
           dark:to-slate-900
 
           text-slate-800
@@ -116,12 +151,13 @@ const ChatMessage = ({ message }: Props) => {
 
           backdrop-blur-xl
 
-          shadow-sm
+          shadow-md
           shadow-slate-200/40
           dark:shadow-black/20
 
           hover:border-cyan-400/30
           hover:shadow-xl
+          hover:-translate-y-0.5
         `
     }
   `}
@@ -131,7 +167,9 @@ const ChatMessage = ({ message }: Props) => {
 
           <span
             className={`
-              mt-2
+          mt-1.5
+
+sm:mt-2
               
 
               text-xs

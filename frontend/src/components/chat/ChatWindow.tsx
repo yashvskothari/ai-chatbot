@@ -35,21 +35,31 @@ const ChatWindow = ({
 
     bg-(--bg-primary)
 
-    px-8
-    py-8
+    px-4
+py-4
+
+sm:px-6
+sm:py-6
+
+lg:px-8
+lg:py-8
 
     transition-colors
     duration-300
   "
 >
-      <div className="mx-auto max-w-5xl">
+      <div className="mx-auto max-w-full
+
+xl:max-w-5xl">
 
         {messages.length === 0 && !loading ? (
 
           <div
             className="
               flex
-              min-h-[70vh]
+              min-h-[60vh]
+
+lg:min-h-[70vh]
               flex-col
               items-center
               justify-center
@@ -64,9 +74,14 @@ const ChatWindow = ({
                 mb-8
 
                 flex
-                h-20
-                w-20
+                h-14
+w-14
 
+sm:h-16
+sm:w-16
+
+lg:h-20
+lg:w-20
                 items-center
                 justify-center
 
@@ -92,7 +107,11 @@ const ChatWindow = ({
 
           <h1
   className="
-    text-4xl
+    text-2xl
+
+sm:text-3xl
+
+lg:text-4xl
     font-bold
     tracking-tight
 
@@ -107,7 +126,11 @@ const ChatWindow = ({
             <p
               className="
                 mt-4
-                max-w-xl
+                max-w-md
+
+sm:max-w-lg
+
+lg:max-w-xl
                 text-slate-500 dark:text-slate-400
               "
             >
@@ -126,11 +149,17 @@ const ChatWindow = ({
 
                 w-full
 
-                max-w-4xl
+                max-w-full
 
-                grid-cols-2
+xl:max-w-4xl
 
-                gap-5
+                grid-cols-1
+
+sm:grid-cols-2
+
+                gap-4
+
+lg:gap-5
               "
             >
 

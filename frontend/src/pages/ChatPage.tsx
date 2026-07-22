@@ -11,18 +11,21 @@ import { useConversations } from "../hooks/useConversations";
 import type { Message } from "../types/chat";
 
 const ChatPage = () => {
- const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-const {
-  conversations,
-  activeConversation,
-  activeConversationId,
-  createConversation,
-  selectConversation,
-  updateMessages,
-  deleteConversation,
-  renameConversation
-} = useConversations();
+  // NEW
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const {
+    conversations,
+    activeConversation,
+    activeConversationId,
+    createConversation,
+    selectConversation,
+    updateMessages,
+    deleteConversation,
+    renameConversation,
+  } = useConversations();
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -40,104 +43,118 @@ const {
     window.addEventListener("keydown", handleKeyDown);
 
     return () =>
-      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener(
+        "keydown",
+        handleKeyDown
+      );
   }, []);
 
   useEffect(() => {
-  if (conversations.length === 0) {
-    createConversation();
-  }
-}, [conversations, createConversation]);
+    if (conversations.length === 0) {
+      createConversation();
+    }
+  }, [conversations, createConversation]);
 
   const sendMessage = async (text: string) => {
-  if (!text.trim() || !activeConversation) return;
+    if (!text.trim() || !activeConversation)
+      return;
 
-  const userMessage: Message = {
-    id: Date.now(),
-    role: "user",
-    content: text,
-  };
-
-  // Add the user's message
-  const updatedMessages = [
-    ...activeConversation.messages,
-    userMessage,
-  ];
-
-  updateMessages(updatedMessages);
-
-  setLoading(true);
-
-  try {
-    const response = await api.post("/chat", {
-      message: text,
-    });
-
-    const aiMessage: Message = {
-      id: Date.now() + 1,
-      role: "assistant",
-      content: response.data.response,
+    const userMessage: Message = {
+      id: Date.now(),
+      role: "user",
+      content: text,
     };
 
-    // Add the AI's response
-    updateMessages([
-      ...updatedMessages,
-      aiMessage,
-    ]);
+    const updatedMessages = [
+      ...activeConversation.messages,
+      userMessage,
+    ];
 
-  } catch {
-    updateMessages([
-      ...updatedMessages,
-      {
-        id: Date.now() + 2,
+    updateMessages(updatedMessages);
+
+    setLoading(true);
+
+    try {
+      const response = await api.post("/chat", {
+        message: text,
+      });
+
+      const aiMessage: Message = {
+        id: Date.now() + 1,
         role: "assistant",
-        content: "Something went wrong.",
-      },
-    ]);
+        content: response.data.response,
+      };
 
-  } finally {
-    setLoading(false);
-    inputRef.current?.focus();
-  }
-};
+      updateMessages([
+        ...updatedMessages,
+        aiMessage,
+      ]);
+    } catch {
+      updateMessages([
+        ...updatedMessages,
+        {
+          id: Date.now() + 2,
+          role: "assistant",
+          content: "Something went wrong.",
+        },
+      ]);
+    } finally {
+      setLoading(false);
+      inputRef.current?.focus();
+    }
+  };
 
   return (
     <div
-  className="
-    h-screen
-    flex
-    flex-col
+      className="
+        h-screen
+        flex
+        flex-col
 
-    bg-(--bg-primary)
-    text-(--text-primary)
-    
-    transition-colors
-    duration-300
-  "
->
-      <Navbar />
+        bg-(--bg-primary)
+        text-(--text-primary)
+
+        transition-colors
+        duration-300
+      "
+    >
+      <Navbar
+        onMenuClick={() =>
+          setSidebarOpen(true)
+        }
+      />
 
       <div className="flex flex-1 overflow-hidden">
         <Sidebar
-  conversations={conversations}
-  activeConversationId={activeConversationId}
-  onSelect={selectConversation}
-  onNewChat={createConversation}
-  onRename={renameConversation}
-  onDelete={deleteConversation}
-/>
+          open={sidebarOpen}
+          onClose={() =>
+            setSidebarOpen(false)
+          }
+          conversations={conversations}
+          activeConversationId={
+            activeConversationId
+          }
+          onSelect={selectConversation}
+          onNewChat={createConversation}
+          onRename={renameConversation}
+          onDelete={deleteConversation}
+        />
 
-        <div className="flex flex-col flex-1">
+        <div className="flex flex-1 flex-col">
           <ChatWindow
-  messages={activeConversation?.messages ?? []}
-  loading={loading}
-/>
-        <div className = "border-t-2 border-(--border-color)">
-          <ChatInput
-            ref={inputRef}
-            onSend={sendMessage}
+            messages={
+              activeConversation?.messages ??
+              []
+            }
             loading={loading}
           />
+
+          <div className="border-t-2 border-(--border-color)">
+            <ChatInput
+              ref={inputRef}
+              onSend={sendMessage}
+              loading={loading}
+            />
           </div>
         </div>
       </div>

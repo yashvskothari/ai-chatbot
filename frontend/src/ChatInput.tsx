@@ -63,13 +63,13 @@ const ChatInput = forwardRef<
 
           backdrop-blur-2xl
 
-          shadow-[var(--shadow-soft)]
+          shadow-var(--shadow-soft)
 
           transition-all
           duration-300
 
           focus-within:border-blue-500/40
-          focus-within:shadow-[var(--shadow-glow)]
+          focus-within:shadow-var(--shadow-glow)
         "
       >
 
@@ -110,7 +110,7 @@ const ChatInput = forwardRef<
 
             outline-none
 
-            placeholder:text-[var(--text-secondary)]
+            placeholder:text-var(--text-secondary)
 
             max-h-44
 

@@ -46,15 +46,20 @@ const ChatInput = forwardRef<
   };
 
   return (
-    <div
+<div
   className="
-    px-8
-    pb-8
-    pt-3
+    px-3
+    pt-2
+    pb-3
 
-    bg-transparent
+    sm:px-5
+    sm:pb-5
 
-    transition-colors
+    lg:px-8
+    lg:pb-8
+    lg:pt-3
+
+    transition-all
     duration-300
   "
 >
@@ -62,9 +67,11 @@ const ChatInput = forwardRef<
       <div
         className="
           mx-auto
-          max-w-5xl
+          max-w-full
+xl:max-w-5xl
 
-          rounded-[30px]
+          rounded-3xl
+lg:rounded-[30px]
 
           border
           border-(--border-color)
@@ -112,10 +119,16 @@ const ChatInput = forwardRef<
 
             bg-transparent
 
-            px-6
-            pt-5
+           px-4
+pt-4
 
-            text-[15px]
+sm:px-5
+sm:pt-5
+
+lg:px-6
+
+            text-sm
+lg:text-[18px]
             text-(--text-primary)
 
             outline-none
@@ -134,24 +147,29 @@ const ChatInput = forwardRef<
             items-center
             justify-between
 
-            px-4
-            pb-4
-            pt-2
+           px-3
+pb-3
+pt-2
+
+sm:px-4
+sm:pb-4
           "
         >
 
           {/* Left */}
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2
+sm:gap-3
+lg:gap-4">
 
             <button
               className="
                 rounded-xl
 
                 p-2
+sm:p-2.5
 
                 text-(--text-secondary)
-
                 transition-all
                 duration-300
 
@@ -172,6 +190,8 @@ const ChatInput = forwardRef<
 
               <span
                 className="
+                  hidden
+                  sm:block
                   text-xs
                   text-(--text-secondary)
                 "
@@ -183,6 +203,9 @@ const ChatInput = forwardRef<
 
             <span
               className="
+                hidden
+                md:block
+
                 text-xs
                 text-(--text-secondary)
               "
@@ -197,8 +220,10 @@ const ChatInput = forwardRef<
               className="
                 rounded-2xl
 
-                px-4
-                py-3
+                px-3
+py-3
+
+sm:px-4
 
                 transition-all
                 duration-300
@@ -206,8 +231,8 @@ const ChatInput = forwardRef<
                 hover:scale-105
               "
             >
-              <SendHorizontal size={18} 
-              className = "text-black dark:text-white"/>
+              <SendHorizontal size={16}  
+              className = "text-black dark:text-white sm:size[18]"/>
             </Button>
 
           </div>

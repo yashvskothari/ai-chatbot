@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Plus,
   MessageSquare,
@@ -10,8 +10,12 @@ import {
 import type { Conversation } from "../../types/conversation";
 
 interface SidebarProps {
+  open: boolean;
+  onClose: () => void;
+
   conversations: Conversation[];
   activeConversationId: string | null;
+
   onSelect: (id: string) => void;
   onNewChat: () => void;
   onRename: (id: string, title: string) => void;
@@ -19,6 +23,8 @@ interface SidebarProps {
 }
 
 const Sidebar = ({
+  open,
+  onClose,
   conversations,
   activeConversationId,
   onSelect,
@@ -27,29 +33,72 @@ const Sidebar = ({
   onDelete,
 }: SidebarProps) => {
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+  useEffect(() => {
+    if (window.innerWidth >= 768) return;
+
+    document.body.style.overflow = open ? "hidden" : "auto";
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [open]);
 
   return (
-    <aside
-      className="
-        w-60
-        flex
-        flex-col
-
-        border-r
-        border-(--border-color)
-
-        bg-(--bg-secondary)
-
-        transition-colors
-        duration-300
-      "
-    >
-      {/* New Chat */}
-
-      <div className="p-4">
-        <button
-          onClick={onNewChat}
+    <>
+      {open && (
+        <div
+          onClick={onClose}
           className="
+        fixed
+        inset-0
+
+        z-40
+
+        bg-black/40
+
+        backdrop-blur-sm
+
+        md:hidden
+      "
+        />
+      )}
+
+      <aside
+        className={`
+      fixed
+      inset-y-0
+      left-0
+
+      z-50
+
+      w-60
+
+      flex
+      flex-col
+
+      border-r
+      border-(--border-color)
+
+      bg-(--bg-secondary)
+
+      transition-all
+      duration-300
+
+      ${open ? "translate-x-0" : "-translate-x-full"}
+
+      md:relative
+      md:translate-x-0
+    `}
+      >
+        {/* New Chat */}
+
+        <div className="p-4">
+          <button
+            onClick={() => {
+              onNewChat();
+              onClose();
+            }}
+            className="
             cursor-pointer
             flex
             w-full
@@ -78,16 +127,16 @@ const Sidebar = ({
             hover:scale-[1.02]
             hover:shadow-blue-500/40
           "
-        >
-          <Plus size={18} />
-          New Chat
-        </button>
-      </div>
+          >
+            <Plus size={18} />
+            New Chat
+          </button>
+        </div>
 
-      {/* Heading */}
+        {/* Heading */}
 
-      <div
-        className="
+        <div
+          className="
           px-4
           pb-2
 
@@ -97,16 +146,16 @@ const Sidebar = ({
 
           text-(--text-primary)
         "
-      >
-        Conversations
-      </div>
+        >
+          Conversations
+        </div>
 
-      {/* Conversation List */}
+        {/* Conversation List */}
 
-      <div className="flex-1 overflow-y-auto px-2 pb-4">
-        {conversations.length === 0 ? (
-          <div
-            className="
+        <div className="flex-1 overflow-y-auto px-2 pb-4">
+          {conversations.length === 0 ? (
+            <div
+              className="
               rounded-xl
               p-4
               text-center
@@ -114,15 +163,18 @@ const Sidebar = ({
 
               text-(--text-secondary)
             "
-          >
-            No conversations yet.
-          </div>
-        ) : (
-          conversations.map((conversation) => (
-            <div key={conversation.id} className="relative mb-2">
-              <button
-                onClick={() => onSelect(conversation.id)}
-                className={`
+            >
+              No conversations yet.
+            </div>
+          ) : (
+            conversations.map((conversation) => (
+              <div key={conversation.id} className="relative mb-2">
+                <button
+                  onClick={() => {
+                    onSelect(conversation.id);
+                    onClose();
+                  }}
+                  className={`
                   group
                   cursor-pointer
                   flex
@@ -144,30 +196,30 @@ const Sidebar = ({
                       : "hover:bg-(--bg-card)"
                   }
                 `}
-              >
-                <MessageSquare size={18} className="text-blue-500 shrink-0" />
+                >
+                  <MessageSquare size={18} className="text-blue-500 shrink-0" />
 
-                <span
-                  className="
+                  <span
+                    className="
                     flex-1
                     truncate
                     text-left
 
                     text-(--text-primary)
                   "
-                >
-                  {conversation.title}
-                </span>
+                  >
+                    {conversation.title}
+                  </span>
 
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
 
-                    setOpenMenuId(
-                      openMenuId === conversation.id ? null : conversation.id,
-                    );
-                  }}
-                  className="
+                      setOpenMenuId(
+                        openMenuId === conversation.id ? null : conversation.id,
+                      );
+                    }}
+                    className="
   cursor-pointer
 
   rounded-lg
@@ -184,16 +236,16 @@ const Sidebar = ({
   hover:bg-(--hover)
   hover:text-(--text-primary)
 "
-                >
-                  <MoreHorizontal size={16} />
+                  >
+                    <MoreHorizontal size={16} />
+                  </button>
                 </button>
-              </button>
 
-              {/* Menu */}
+                {/* Menu */}
 
-              {openMenuId === conversation.id && (
-                <div
-                  className="
+                {openMenuId === conversation.id && (
+                  <div
+                    className="
                     
                     absolute
                     right-2
@@ -216,20 +268,21 @@ const Sidebar = ({
 
                     backdrop-blur-xl
                   "
-                >
-                  <button
-                    onClick={() => {
-                      const title = prompt(
-                        "Rename conversation",
-                        conversation.title,
-                      );
-                      if (title?.trim()) {
-                        onRename(conversation.id, title.trim());
-                      }
+                  >
+                    <button
+                      onClick={() => {
+                        const title = prompt(
+                          "Rename conversation",
+                          conversation.title,
+                        );
+                        if (title?.trim()) {
+                          onRename(conversation.id, title.trim());
+                          onClose();
+                        }
 
-                      setOpenMenuId(null);
-                    }}
-                    className="
+                        setOpenMenuId(null);
+                      }}
+                      className="
                       flex
                       w-full
                       items-center
@@ -245,20 +298,21 @@ const Sidebar = ({
                       hover:bg-black/10
                       dark:hover:bg-white/10
                     "
-                  >
-                    <Pencil size={16} />
-                    Rename
-                  </button>
+                    >
+                      <Pencil size={16} />
+                      Rename
+                    </button>
 
-                  <button
-                    onClick={() => {
-                      if (confirm("Delete this conversation?")) {
-                        onDelete(conversation.id);
-                      }
+                    <button
+                      onClick={() => {
+                        if (confirm("Delete this conversation?")) {
+                          onDelete(conversation.id);
+                          onClose();
+                        }
 
-                      setOpenMenuId(null);
-                    }}
-                    className="
+                        setOpenMenuId(null);
+                      }}
+                      className="
                       flex
                       w-full
                       items-center
@@ -273,17 +327,18 @@ const Sidebar = ({
 
                       hover:bg-red-500/10
                     "
-                  >
-                    <Trash2 size={16} />
-                    Delete
-                  </button>
-                </div>
-              )}
-            </div>
-          ))
-        )}
-      </div>
-    </aside>
+                    >
+                      <Trash2 size={16} />
+                      Delete
+                    </button>
+                  </div>
+                )}
+              </div>
+            ))
+          )}
+        </div>
+      </aside>
+    </>
   );
 };
 
