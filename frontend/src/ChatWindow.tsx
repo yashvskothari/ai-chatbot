@@ -27,13 +27,17 @@ const ChatWindow = ({
     loading,
   ]);
 
+  const cardStyle = {
+    backgroundColor: "var(--bg-card)",
+    borderColor: "var(--border-color)",
+  };
+
   return (
   <main
+  style={{ backgroundColor: "var(--bg-primary)" }}
   className="
     flex-1
     overflow-y-auto
-
-    bg-(--bg-primary)
 
     px-8
     py-8
@@ -91,12 +95,11 @@ const ChatWindow = ({
             {/* Heading */}
 
           <h1
+  style={{ color: "var(--text-primary)" }}
   className="
     text-4xl
     font-bold
     tracking-tight
-
-    text-(--text-primary)
 
     transition-colors
   "
@@ -105,10 +108,10 @@ const ChatWindow = ({
             </h1>
 
             <p
+              style={{ color: "var(--text-secondary)" }}
               className="
                 mt-4
                 max-w-xl
-                text-slate-500 dark:text-slate-400
               "
             >
               Ask questions, generate code,
@@ -135,16 +138,13 @@ const ChatWindow = ({
             >
 
 <Card
-className="
-     cursor-pointer
+  style={cardStyle}
+  className="
+    cursor-pointer
 
     rounded-3xl
 
     border
-    border-(--border-color)
-
-    bg-white
-    dark:bg-(--bg-card)
 
     p-6
 
@@ -153,11 +153,8 @@ className="
 
     hover:-translate-y-1
     hover:border-blue-500/40
-
-    hover:shadow-xl
-
-    shadow-lg
-"
+    hover:shadow-[var(--shadow-soft)]
+  "
 >
 
                 <Code2
@@ -166,15 +163,16 @@ className="
                 />
 
 <h3
-  className="
-    font-semibold
-    text-(--text-primary)
-  "
+  style={{ color: "var(--text-primary)" }}
+  className="font-semibold"
 >
                   Generate Code
                 </h3>
 
-                <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+                <p
+                  style={{ color: "var(--text-secondary)" }}
+                  className="mt-2 text-sm"
+                >
                   Build React, Python,
                   FastAPI and more.
                 </p>
@@ -182,16 +180,13 @@ className="
               </Card>
 
               <Card
-className="
+  style={cardStyle}
+  className="
     cursor-pointer
 
     rounded-3xl
 
     border
-    border-(--border-color)
-
-    bg-white
-    dark:bg-(--bg-card)
 
     p-6
 
@@ -200,11 +195,8 @@ className="
 
     hover:-translate-y-1
     hover:border-blue-500/40
-
-    hover:shadow-xl
-
-    shadow-lg
-"
+    hover:shadow-[var(--shadow-soft)]
+  "
 >
 
                 <FileText
@@ -213,15 +205,16 @@ className="
                 />
 
                 <h3
-  className="
-    font-semibold
-    text-(--text-primary)
-  "
+  style={{ color: "var(--text-primary)" }}
+  className="font-semibold"
 >
                   Summarize Documents
                 </h3>
 
-                <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+                <p
+                  style={{ color: "var(--text-secondary)" }}
+                  className="mt-2 text-sm"
+                >
                   Extract insights from PDFs,
                   reports and notes.
                 </p>
@@ -229,16 +222,13 @@ className="
               </Card>
 
               <Card
-className="
+  style={cardStyle}
+  className="
     cursor-pointer
 
     rounded-3xl
 
     border
-    border-(--border-color)
-
-    bg-white
-    dark:bg-(--bg-card)
 
     p-6
 
@@ -247,11 +237,8 @@ className="
 
     hover:-translate-y-1
     hover:border-blue-500/40
-
-    hover:shadow-xl
-
-    shadow-lg
-"
+    hover:shadow-[var(--shadow-soft)]
+  "
 >
 
                 <Brain
@@ -260,15 +247,16 @@ className="
                 />
 
                 <h3
-  className="
-    font-semibold
-    text-(--text-primary)
-  "
+  style={{ color: "var(--text-primary)" }}
+  className="font-semibold"
 >
                   Brainstorm Ideas
                 </h3>
 
-                <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+                <p
+                  style={{ color: "var(--text-secondary)" }}
+                  className="mt-2 text-sm"
+                >
                   Explore creative solutions
                   and project concepts.
                 </p>
@@ -276,16 +264,13 @@ className="
               </Card>
 
               <Card
-className="
+  style={cardStyle}
+  className="
     cursor-pointer
 
     rounded-3xl
 
     border
-    border-(--border-color)
-
-    bg-white
-    dark:bg-(--bg-card)
 
     p-6
 
@@ -294,11 +279,8 @@ className="
 
     hover:-translate-y-1
     hover:border-blue-500/40
-
-    hover:shadow-xl
-
-    shadow-lg
-"
+    hover:shadow-[var(--shadow-soft)]
+  "
 >
 
                 <Search
@@ -307,15 +289,16 @@ className="
                 />
 
                 <h3
-  className="
-    font-semibold
-    text-(--text-primary)
-  "
+  style={{ color: "var(--text-primary)" }}
+  className="font-semibold"
 >
                   Research Topics
                 </h3>
 
-                <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+                <p
+                  style={{ color: "var(--text-secondary)" }}
+                  className="mt-2 text-sm"
+                >
                   Learn, compare,
                   and understand
                   complex subjects.

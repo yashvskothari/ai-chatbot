@@ -23,190 +23,266 @@ const Sidebar = ({
   activeConversationId,
   onSelect,
   onNewChat,
+  onRename,
   onDelete,
-  onRename
 }: SidebarProps) => {
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
 
   return (
-    <aside className="w-72 bg-slate-950 border-r border-slate-800 flex flex-col">
+    <aside
+      className="
+        w-60
+        flex
+        flex-col
 
+        border-r
+        border-(--border-color)
+
+        bg-(--bg-secondary)
+
+        transition-colors
+        duration-300
+      "
+    >
       {/* New Chat */}
+
       <div className="p-4">
         <button
           onClick={onNewChat}
-          className="w-full flex items-center gap-2 rounded-xl bg-slate-800 hover:bg-slate-700 transition p-3"
+          className="
+            cursor-pointer
+            flex
+            w-full
+            items-center
+            justify-center
+            gap-2
+
+            rounded-2xl
+
+            bg-linear-to-r
+            from-blue-600
+            to-cyan-500
+
+            px-4
+            py-3
+
+            font-medium
+            text-black
+
+            shadow-lg
+            shadow-blue-500/20
+
+            transition-all
+            duration-300
+
+            hover:scale-[1.02]
+            hover:shadow-blue-500/40
+          "
         >
           <Plus size={18} />
-          <span>New Chat</span>
+          New Chat
         </button>
       </div>
 
       {/* Heading */}
-      <div className="px-4 text-xs text-slate-400 uppercase tracking-wider">
+
+      <div
+        className="
+          px-4
+          pb-2
+
+          text-xs
+          uppercase
+          tracking-widest
+
+          text-(--text-primary)
+        "
+      >
         Conversations
       </div>
 
-      {/* List */}
-      <div className="flex-1 overflow-y-auto mt-2 px-2">
+      {/* Conversation List */}
 
+      <div className="flex-1 overflow-y-auto px-2 pb-4">
         {conversations.length === 0 ? (
+          <div
+            className="
+              rounded-xl
+              p-4
+              text-center
+              text-sm
 
-          <div className="px-3 py-2 text-sm text-slate-500">
+              text-(--text-secondary)
+            "
+          >
             No conversations yet.
           </div>
-
         ) : (
-
           conversations.map((conversation) => (
-
-            <div
-              key={conversation.id}
-              className="relative group mb-1"
-            >
-
-              {/* Conversation Button */}
-              <div
-                onClick={() => {
-                  onSelect(conversation.id);
-                  setOpenMenuId(null);
-                }}
+            <div key={conversation.id} className="relative mb-2">
+              <button
+                onClick={() => onSelect(conversation.id)}
                 className={`
-                  w-full
+                  group
+                  cursor-pointer
                   flex
+                  w-full
                   items-center
-                  justify-between
-                  rounded-lg
-                  px-3
+                  gap-3
+
+                  rounded-2xl
+
+                  px-4
                   py-3
-                  transition
+
+                  transition-all
+                  duration-300
+
                   ${
                     activeConversationId === conversation.id
-                      ? "bg-slate-700"
-                      : "hover:bg-slate-800"
+                      ? "bg-(--bg-card) shadow-(--shadow-soft)"
+                      : "hover:bg-(--bg-card)"
                   }
                 `}
               >
-                <div className="flex items-center gap-3 overflow-hidden">
-                  <MessageSquare size={18} />
+                <MessageSquare size={18} className="text-blue-500 shrink-0" />
 
-                  <span className="truncate">
-                    {conversation.title}
-                  </span>
-                </div>
+                <span
+                  className="
+                    flex-1
+                    truncate
+                    text-left
 
-                {/* Three Dots */}
+                    text-(--text-primary)
+                  "
+                >
+                  {conversation.title}
+                </span>
+
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
 
                     setOpenMenuId(
-                      openMenuId === conversation.id
-                        ? null
-                        : conversation.id
+                      openMenuId === conversation.id ? null : conversation.id,
                     );
                   }}
                   className="
-                    opacity-0
-                    group-hover:opacity-100
-                    transition
-                    rounded-md
-                    p-1
-                    hover:bg-slate-600
-                  "
+  cursor-pointer
+
+  rounded-lg
+
+  p-1.5
+
+  text-(--text-secondary)
+
+  transition-all
+  duration-200
+
+  group-hover:opacity-100
+
+  hover:bg-(--hover)
+  hover:text-(--text-primary)
+"
                 >
-                  <MoreHorizontal size={18} />
+                  <MoreHorizontal size={16} />
                 </button>
+              </button>
 
-              </div>
+              {/* Menu */}
 
-              {/* Dropdown Menu */}
               {openMenuId === conversation.id && (
-
                 <div
                   className="
+                    
                     absolute
-                    right-3
+                    right-2
                     top-14
+
                     z-50
+
                     w-40
-                    rounded-xl
-                    border
-                    border-slate-700
-                    bg-slate-900
-                    shadow-2xl
+
                     overflow-hidden
+
+                    rounded-2xl
+
+                    border
+                    border-(--border-color)
+
+                    bg-(--bg-card)
+
+                    shadow-2xl
+
+                    backdrop-blur-xl
                   "
                 >
+                  <button
+                    onClick={() => {
+                      const title = prompt(
+                        "Rename conversation",
+                        conversation.title,
+                      );
+                      if (title?.trim()) {
+                        onRename(conversation.id, title.trim());
+                      }
 
-<button
-  onClick={() => {
-    const title = window.prompt(
-      "Rename conversation",
-      conversation.title
-    );
+                      setOpenMenuId(null);
+                    }}
+                    className="
+                      flex
+                      w-full
+                      items-center
+                      gap-3
 
-    if (title && title.trim()) {
-      onRename(conversation.id, title.trim());
-    }
+                      px-4
+                      py-3
 
-    setOpenMenuId(null);
-  }}
-  className="
-    w-full
-    flex
-    items-center
-    gap-3
-    px-4
-    py-3
-    text-sm
-    hover:bg-slate-800
-  "
->
-  <Pencil size={16} />
-  Rename
-</button>
+                      text-(--text-primary)
 
-             <button
-  onClick={() => {
-    const ok = window.confirm(
-      "Delete this conversation?"
-    );
+                      transition
 
-    if (ok) {
-      onDelete(conversation.id);
-    }
+                      hover:bg-black/10
+                      dark:hover:bg-white/10
+                    "
+                  >
+                    <Pencil size={16} />
+                    Rename
+                  </button>
 
-    setOpenMenuId(null);
-  }}
-  className="
-    w-full
-    flex
-    items-center
-    gap-3
-    px-4
-    py-3
-    text-sm
-    text-red-400
-    hover:bg-slate-800
-  "
->
-  <Trash2 size={16} />
-  Delete
-</button>
+                  <button
+                    onClick={() => {
+                      if (confirm("Delete this conversation?")) {
+                        onDelete(conversation.id);
+                      }
 
+                      setOpenMenuId(null);
+                    }}
+                    className="
+                      flex
+                      w-full
+                      items-center
+                      gap-3
+
+                      px-4
+                      py-3
+
+                      text-red-500
+
+                      transition
+
+                      hover:bg-red-500/10
+                    "
+                  >
+                    <Trash2 size={16} />
+                    Delete
+                  </button>
                 </div>
-
               )}
-
             </div>
-
           ))
-
         )}
-
       </div>
-
     </aside>
   );
 };

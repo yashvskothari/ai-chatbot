@@ -1,0 +1,177 @@
+/* =========================================================
+   Flux AI Design System
+========================================================= */
+
+:root {
+  /* =========================
+     Radius
+  ========================= */
+
+  --radius-xs: 8px;
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+  --radius-xl: 28px;
+
+  /* =========================
+     Animation
+  ========================= */
+
+  --transition-fast: 150ms ease;
+  --transition: 200ms ease;
+  --transition-slow: 300ms ease;
+
+  /* =========================
+     Layout
+  ========================= */
+
+  --navbar-height: 72px;
+  --sidebar-width: 290px;
+  --message-max-width: 760px;
+
+  /* =========================
+     Theme (Dark Default)
+  ========================= */
+
+  --bg-primary: #020617;
+  --bg-secondary: #0f172a;
+  --bg-card: rgba(15, 23, 42, 0.75);
+
+  --text-primary: #ffffff;
+  --text-secondary: #94a3b8;
+
+  --border-color: rgba(255, 255, 255, 0.08);
+
+  --hover: rgba(255, 255, 255, 0.06);
+
+  /* Accent */
+
+  --accent: #3b82f6;
+  --accent-hover: #2563eb;
+
+  /* Gradients */
+
+  --gradient-primary: linear-gradient(
+    135deg,
+    #2563eb,
+    #06b6d4
+  );
+
+  --gradient-secondary: linear-gradient(
+    135deg,
+    #10b981,
+    #06b6d4
+  );
+
+  --gradient-logo: linear-gradient(
+    135deg,
+    #4f46e5,
+    #06b6d4
+  );
+
+  /* Shadows */
+
+  --shadow-soft: 0 8px 30px rgba(0, 0, 0, 0.15);
+
+  --shadow-medium: 0 12px 40px rgba(0, 0, 0, 0.20);
+
+  --shadow-glow: 0 8px 30px rgba(59, 130, 246, 0.18);
+}
+
+/* =========================================================
+   Light Theme
+========================================================= */
+
+.light {
+
+  --bg-primary: #f5f7fb;
+
+  --bg-secondary: rgba(255, 255, 255, 0.85);
+
+  --bg-card: rgba(255, 255, 255, 0.92);
+
+  --text-primary: #0f172a;
+
+  --text-secondary: #64748b;
+
+  --border-color: rgba(15, 23, 42, 0.10);
+
+  --hover: rgba(15, 23, 42, 0.05);
+
+  --accent: #2563eb;
+
+  --accent-hover: #1d4ed8;
+
+  --gradient-primary: linear-gradient(
+    135deg,
+    #2563eb,
+    #06b6d4
+  );
+
+  --gradient-secondary: linear-gradient(
+    135deg,
+    #10b981,
+    #3b82f6
+  );
+
+  --gradient-logo: linear-gradient(
+    135deg,
+    #4338ca,
+    #06b6d4
+  );
+
+  --shadow-soft: 0 8px 30px rgba(15, 23, 42, 0.08);
+
+  --shadow-medium: 0 12px 40px rgba(15, 23, 42, 0.12);
+
+  --shadow-glow: 0 8px 30px rgba(37, 99, 235, 0.18);
+}
+
+/* =========================================================
+   Dark Theme
+========================================================= */
+
+.dark {
+
+  --bg-primary: #020617;
+
+  --bg-secondary: #0f172a;
+
+  --bg-card: rgba(15, 23, 42, 0.75);
+
+  --text-primary: #ffffff;
+
+  --text-secondary: #94a3b8;
+
+  --border-color: rgba(255, 255, 255, 0.08);
+
+  --hover: rgba(255, 255, 255, 0.06);
+
+  --accent: #3b82f6;
+
+  --accent-hover: #2563eb;
+
+  --gradient-primary: linear-gradient(
+    135deg,
+    #2563eb,
+    #06b6d4
+  );
+
+  --gradient-secondary: linear-gradient(
+    135deg,
+    #10b981,
+    #06b6d4
+  );
+
+  --gradient-logo: linear-gradient(
+    135deg,
+    #4f46e5,
+    #06b6d4
+  );
+
+  --shadow-soft: 0 8px 30px rgba(0, 0, 0, 0.15);
+
+  --shadow-medium: 0 12px 40px rgba(0, 0, 0, 0.20);
+
+  --shadow-glow: 0 8px 30px rgba(59, 130, 246, 0.18);
+}

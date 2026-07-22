@@ -102,7 +102,19 @@ const {
 };
 
   return (
-    <div className="h-screen flex flex-col bg-slate-900 text-white">
+    <div
+  className="
+    h-screen
+    flex
+    flex-col
+
+    bg-(--bg-primary)
+    text-(--text-primary)
+    
+    transition-colors
+    duration-300
+  "
+>
       <Navbar />
 
       <div className="flex flex-1 overflow-hidden">
@@ -120,12 +132,13 @@ const {
   messages={activeConversation?.messages ?? []}
   loading={loading}
 />
-
+        <div className = "border-t-2 border-(--border-color)">
           <ChatInput
             ref={inputRef}
             onSend={sendMessage}
             loading={loading}
           />
+          </div>
         </div>
       </div>
     </div>

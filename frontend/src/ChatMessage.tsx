@@ -47,8 +47,8 @@ const ChatMessage = ({ message }: Props) => {
 
             ${
               isUser
-                ? "bg-linear-to-br from-blue-600 to-indigo-600"
-                : "bg-linear-to-br from-emerald-500 to-cyan-500"
+                ? "bg-gradient-to-br from-blue-600 to-indigo-600"
+                : "bg-gradient-to-br from-emerald-500 to-cyan-500"
             }
 
             text-white
@@ -67,76 +67,59 @@ const ChatMessage = ({ message }: Props) => {
 
         <div className="flex flex-col">
 
-<Card
-  className={`
-    rounded-[26px]
-    text-lg
-    px-5
-    py-4
+          <Card
+            style={
+              isUser
+                ? undefined
+                : {
+                    backgroundColor: "var(--bg-card)",
+                    borderColor: "var(--border-color)",
+                    color: "var(--text-primary)",
+                  }
+            }
+            className={`
+              rounded-3xl
 
-    leading-8
+              px-5
+              py-4
 
-    whitespace-pre-wrap
-    wrap-break-word
+              leading-7
 
-    border
+              whitespace-pre-wrap
+              wrap-break-word
 
-    transition-all
-    duration-300
+              transition-all
+              duration-300
 
-    ${
-      isUser
-        ? `
-          border-blue-400/25
+              ${
+                isUser
+                  ? `
+                    bg-gradient-to-br
+                    from-blue-600
+                    to-indigo-600
 
-          bg-linear-to-br
-          from-blue-600
-          via-indigo-600
-          to-violet-700
+                    text-white
 
-          text-white
+                    shadow-lg
+                    shadow-blue-500/20
+                  `
+                  : `
+                    border
 
-          shadow-sm
-          shadow-blue-500/20
-        `
-        : `
-          border-var(--border-color)
-
-          bg-linear-to-br
-          from-sky-50
-          via-cyan-50
-          to-blue-100
-
-          dark:from-slate-800
-          dark:via-slate-800
-          dark:to-slate-900
-
-          text-slate-800
-          dark:text-slate-100
-
-          backdrop-blur-xl
-
-          shadow-sm
-          shadow-slate-200/40
-          dark:shadow-black/20
-
-          hover:border-cyan-400/30
-          hover:shadow-xl
-        `
-    }
-  `}
->
+                    shadow-[var(--shadow-soft)]
+                  `
+              }
+            `}
+          >
             {message.content}
           </Card>
 
           <span
+            style={{ color: "var(--text-secondary)" }}
             className={`
               mt-2
-              
 
               text-xs
-
-              text-(--text)
 
               ${
                 isUser

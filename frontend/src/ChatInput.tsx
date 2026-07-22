@@ -46,20 +46,13 @@ const ChatInput = forwardRef<
   };
 
   return (
-    <div
-  className="
-    px-8
-    pb-8
-    pt-3
-
-    bg-transparent
-
-    transition-colors
-    duration-300
-  "
->
+    <div className="px-8 pb-8 pt-3">
 
       <div
+        style={{
+          backgroundColor: "var(--bg-card)",
+          borderColor: "var(--border-color)",
+        }}
         className="
           mx-auto
           max-w-5xl
@@ -67,19 +60,16 @@ const ChatInput = forwardRef<
           rounded-[30px]
 
           border
-          border-(--border-color)
-
-          bg-(--bg-card)
 
           backdrop-blur-2xl
 
-          shadow-(--shadow-soft)
+          shadow-[var(--shadow-soft)]
 
           transition-all
           duration-300
 
           focus-within:border-blue-500/40
-          focus-within:shadow-(--shadow-glow)
+          focus-within:shadow-[var(--shadow-glow)]
         "
       >
 
@@ -105,6 +95,7 @@ const ChatInput = forwardRef<
               handleSend();
             }
           }}
+          style={{ color: "var(--text-primary)" }}
           className="
             w-full
 
@@ -116,11 +107,10 @@ const ChatInput = forwardRef<
             pt-5
 
             text-[15px]
-            text-(--text-primary)
 
             outline-none
 
-            placeholder:text-(--text-secondary)
+            placeholder:text-[var(--text-secondary)]
 
             max-h-44
 
@@ -145,12 +135,11 @@ const ChatInput = forwardRef<
           <div className="flex items-center gap-3">
 
             <button
+              style={{ color: "var(--text-secondary)" }}
               className="
                 rounded-xl
 
                 p-2
-
-                text-(--text-secondary)
 
                 transition-all
                 duration-300
@@ -171,10 +160,8 @@ const ChatInput = forwardRef<
             {message.length > 0 && (
 
               <span
-                className="
-                  text-xs
-                  text-(--text-secondary)
-                "
+                style={{ color: "var(--text-secondary)" }}
+                className="text-xs"
               >
                 {message.length}/{MAX_CHARACTERS}
               </span>
@@ -182,10 +169,8 @@ const ChatInput = forwardRef<
             )}
 
             <span
-              className="
-                text-xs
-                text-(--text-secondary)
-              "
+              style={{ color: "var(--text-secondary)" }}
+              className="text-xs"
             >
               Ctrl + Enter
             </span>
@@ -206,8 +191,7 @@ const ChatInput = forwardRef<
                 hover:scale-105
               "
             >
-              <SendHorizontal size={18} 
-              className = "text-black dark:text-white"/>
+              <SendHorizontal size={18} />
             </Button>
 
           </div>
