@@ -8,6 +8,8 @@ import {
 } from "lucide-react";
 
 import type { Conversation } from "../../types/conversation";
+import RenameModal from "../ui/RenameModal";
+import DeleteModal from "../ui/DeleteModal";
 
 interface SidebarProps {
   open: boolean;
@@ -33,6 +35,13 @@ const Sidebar = ({
   onDelete,
 }: SidebarProps) => {
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+  const [renameOpen, setRenameOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+
+  const [renameValue, setRenameValue] = useState("");
+
+  const [selectedConversation, setSelectedConversation] =
+    useState<Conversation | null>(null);
   useEffect(() => {
     if (window.innerWidth >= 768) return;
 
@@ -270,18 +279,13 @@ const Sidebar = ({
                   "
                   >
                     <button
-                      onClick={() => {
-                        const title = prompt(
-                          "Rename conversation",
-                          conversation.title,
-                        );
-                        if (title?.trim()) {
-                          onRename(conversation.id, title.trim());
-                          onClose();
-                        }
+                     onClick={() => {
+  setSelectedConversation(conversation);
+  setRenameValue(conversation.title);
 
-                        setOpenMenuId(null);
-                      }}
+  setRenameOpen(true);
+  setOpenMenuId(null);
+}}
                       className="
                       flex
                       w-full
@@ -304,14 +308,13 @@ const Sidebar = ({
                     </button>
 
                     <button
-                      onClick={() => {
-                        if (confirm("Delete this conversation?")) {
-                          onDelete(conversation.id);
-                          onClose();
-                        }
+                    onClick={() => {
+  setSelectedConversation(conversation);
 
-                        setOpenMenuId(null);
-                      }}
+  setDeleteOpen(true);
+
+  setOpenMenuId(null);
+}}
                       className="
                       flex
                       w-full
@@ -338,6 +341,36 @@ const Sidebar = ({
           )}
         </div>
       </aside>
+      <RenameModal
+  open={renameOpen}
+  value={renameValue}
+  onChange={setRenameValue}
+  onClose={() => setRenameOpen(false)}
+  onSave={() => {
+    if (!selectedConversation) return;
+
+    if (renameValue.trim()) {
+      onRename(
+        selectedConversation.id,
+        renameValue.trim()
+      );
+    }
+
+    setRenameOpen(false);
+  }}
+/>
+
+<DeleteModal
+  open={deleteOpen}
+  onClose={() => setDeleteOpen(false)}
+  onDelete={() => {
+    if (!selectedConversation) return;
+
+    onDelete(selectedConversation.id);
+
+    setDeleteOpen(false);
+  }}
+/>
     </>
   );
 };

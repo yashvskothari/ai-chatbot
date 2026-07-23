@@ -1,6 +1,7 @@
 import { Bot, User } from "lucide-react";
 import { Card } from "../ui";
 import type { Message } from "../../types/chat";
+import MarkdownRenderer from "./MarkdownRenderer";
 
 interface Props {
   message: Message;
@@ -162,7 +163,9 @@ to-blue-50
     }
   `}
 >
-            {message.content}
+            <MarkdownRenderer
+            content = {message.content}
+            />
           </Card>
 
           <span
