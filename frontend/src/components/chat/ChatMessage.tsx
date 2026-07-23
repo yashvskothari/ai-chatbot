@@ -1,4 +1,4 @@
-import { Bot, User } from "lucide-react";
+import { Bot, User, FileText, ImageIcon } from "lucide-react";
 import { Card } from "../ui";
 import type { Message } from "../../types/chat";
 import MarkdownRenderer from "./MarkdownRenderer";
@@ -163,9 +163,66 @@ to-blue-50
     }
   `}
 >
-            <MarkdownRenderer
-            content = {message.content}
-            />
+            {message.attachments && message.attachments.length > 0 && (
+              <div className="mb-3 flex flex-wrap gap-2">
+                {message.attachments.map((attachment) => (
+                  <div
+                    key={attachment.id}
+                    className={`
+                      flex
+                      items-center
+                      gap-2
+
+                      rounded-xl
+
+                      border
+
+                      px-2.5
+                      py-1.5
+
+                      text-xs
+
+                      ${
+                        isUser
+                          ? "border-white/20 bg-white/10"
+                          : "border-(--border-color) bg-(--bg-secondary)"
+                      }
+                    `}
+                  >
+                    {attachment.type === "image" && attachment.preview ? (
+                      <img
+                        src={attachment.preview}
+                        alt={attachment.filename}
+                        className="h-6 w-6 rounded object-cover"
+                      />
+                    ) : attachment.type === "image" ? (
+                      <ImageIcon size={14} />
+                    ) : (
+                      <FileText size={14} />
+                    )}
+                    <span className="max-w-32 truncate">
+                      {attachment.filename}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <MarkdownRenderer content={message.content} />
+
+            {message.streaming && (
+              <span
+                className="
+                  ml-0.5
+                  inline-block
+                  h-4
+                  w-2px
+                  translate-y-0.5
+                  animate-pulse
+                  bg-current
+                "
+              />
+            )}
           </Card>
 
           <span

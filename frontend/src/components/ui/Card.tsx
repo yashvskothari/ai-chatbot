@@ -1,12 +1,12 @@
 import clsx from "clsx";
-import type { ReactNode } from "react";
+import type { ReactNode, HTMLAttributes } from "react";
 
-interface CardProps {
+interface CardProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
   className?: string;
 }
 
-const Card = ({ children, className }: CardProps) => {
+const Card = ({ children, className, ...props }: CardProps) => {
   return (
     <div
       className={clsx(
@@ -17,6 +17,7 @@ const Card = ({ children, className }: CardProps) => {
         "shadow-xl",
         className
       )}
+      {...props}
     >
       {children}
     </div>

@@ -16,19 +16,54 @@ import { Card } from "../ui";
 interface Props {
   messages: Message[];
   loading: boolean;
+  onSuggestionClick?: (prompt: string) => void;
 }
+
+const SUGGESTIONS = [
+  {
+    icon: Code2,
+    color: "text-blue-400",
+    title: "Generate Code",
+    description: "Build React, Python, FastAPI and more.",
+    prompt:
+      "Write a well-documented function that solves the following problem: ",
+  },
+  {
+    icon: FileText,
+    color: "text-emerald-400",
+    title: "Summarize Documents",
+    description: "Extract insights from PDFs, reports and notes.",
+    prompt:
+      "Please summarize the key points of the document I've attached.",
+  },
+  {
+    icon: Brain,
+    color: "text-purple-400",
+    title: "Brainstorm Ideas",
+    description: "Explore creative solutions and project concepts.",
+    prompt: "Help me brainstorm ideas for ",
+  },
+  {
+    icon: Search,
+    color: "text-cyan-400",
+    title: "Research Topics",
+    description: "Learn, compare, and understand complex subjects.",
+    prompt: "Explain, with pros and cons, the differences between ",
+  },
+];
 
 const ChatWindow = ({
   messages,
   loading,
+  onSuggestionClick,
 }: Props) => {
-  const bottomRef = useAutoScroll([
-    messages,
-    loading,
-  ]);
-
+const { containerRef, bottomRef } = useAutoScroll([
+  messages,
+  loading,
+]);
   return (
   <main
+  ref={containerRef}
   className="
     flex-1
     overflow-y-auto
@@ -162,196 +197,56 @@ sm:grid-cols-2
 lg:gap-5
               "
             >
+              {SUGGESTIONS.map((suggestion) => {
+                const Icon = suggestion.icon;
 
-<Card
-className="
-     cursor-pointer
+                return (
+                  <Card
+                    key={suggestion.title}
+                    onClick={() => onSuggestionClick?.(suggestion.prompt)}
+                    className="
+                      cursor-pointer
 
-    rounded-3xl
+                      rounded-3xl
 
-    border
-    border-(--border-color)
+                      border
+                      border-(--border-color)
 
-    bg-white
-    dark:bg-(--bg-card)
+                      bg-white
+                      dark:bg-(--bg-card)
 
-    p-6
+                      p-6
 
-    transition-all
-    duration-300
+                      text-left
 
-    hover:-translate-y-1
-    hover:border-blue-500/40
+                      transition-all
+                      duration-300
 
-    hover:shadow-xl
+                      hover:-translate-y-1
+                      hover:border-blue-500/40
 
-    shadow-lg
-"
->
+                      hover:shadow-xl
 
-                <Code2
-                  className="mb-4 text-blue-400"
-                  size={26}
-                />
+                      shadow-lg
+                    "
+                  >
+                    <Icon className={`mb-4 ${suggestion.color}`} size={26} />
 
-<h3
-  className="
-    font-semibold
-    text-(--text-primary)
-  "
->
-                  Generate Code
-                </h3>
+                    <h3
+                      className="
+                        font-semibold
+                        text-(--text-primary)
+                      "
+                    >
+                      {suggestion.title}
+                    </h3>
 
-                <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-                  Build React, Python,
-                  FastAPI and more.
-                </p>
-
-              </Card>
-
-              <Card
-className="
-    cursor-pointer
-
-    rounded-3xl
-
-    border
-    border-(--border-color)
-
-    bg-white
-    dark:bg-(--bg-card)
-
-    p-6
-
-    transition-all
-    duration-300
-
-    hover:-translate-y-1
-    hover:border-blue-500/40
-
-    hover:shadow-xl
-
-    shadow-lg
-"
->
-
-                <FileText
-                  className="mb-4 text-emerald-400"
-                  size={26}
-                />
-
-                <h3
-  className="
-    font-semibold
-    text-(--text-primary)
-  "
->
-                  Summarize Documents
-                </h3>
-
-                <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-                  Extract insights from PDFs,
-                  reports and notes.
-                </p>
-
-              </Card>
-
-              <Card
-className="
-    cursor-pointer
-
-    rounded-3xl
-
-    border
-    border-(--border-color)
-
-    bg-white
-    dark:bg-(--bg-card)
-
-    p-6
-
-    transition-all
-    duration-300
-
-    hover:-translate-y-1
-    hover:border-blue-500/40
-
-    hover:shadow-xl
-
-    shadow-lg
-"
->
-
-                <Brain
-                  className="mb-4 text-purple-400"
-                  size={26}
-                />
-
-                <h3
-  className="
-    font-semibold
-    text-(--text-primary)
-  "
->
-                  Brainstorm Ideas
-                </h3>
-
-                <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-                  Explore creative solutions
-                  and project concepts.
-                </p>
-
-              </Card>
-
-              <Card
-className="
-    cursor-pointer
-
-    rounded-3xl
-
-    border
-    border-(--border-color)
-
-    bg-white
-    dark:bg-(--bg-card)
-
-    p-6
-
-    transition-all
-    duration-300
-
-    hover:-translate-y-1
-    hover:border-blue-500/40
-
-    hover:shadow-xl
-
-    shadow-lg
-"
->
-
-                <Search
-                  className="mb-4 text-cyan-400"
-                  size={26}
-                />
-
-                <h3
-  className="
-    font-semibold
-    text-(--text-primary)
-  "
->
-                  Research Topics
-                </h3>
-
-                <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-                  Learn, compare,
-                  and understand
-                  complex subjects.
-                </p>
-
-              </Card>
-
+                    <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+                      {suggestion.description}
+                    </p>
+                  </Card>
+                );
+              })}
             </div>
 
           </div>
@@ -377,7 +272,7 @@ className="
 
             ))}
 
-            {loading && (
+            {loading && messages[messages.length - 1]?.role !== "assistant" && (
               <TypingIndicator />
             )}
 

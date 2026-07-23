@@ -1,13 +1,27 @@
-import { Menu } from "lucide-react";
+import { useRef, useState } from "react";
+import { Menu, Download, FileText, FileDown } from "lucide-react";
 
 import logo from "../../assets/logo.png";
 import ThemeToggle from "../ui/ThemeToggle";
+import { useClickOutside } from "../../hooks/useClickOutside";
 
 interface NavbarProps {
   onMenuClick: () => void;
+  onExportMarkdown?: () => void;
+  onExportPDF?: () => void;
+  exportDisabled?: boolean;
 }
 
-const Navbar = ({ onMenuClick }: NavbarProps) => {
+const Navbar = ({
+  onMenuClick,
+  onExportMarkdown,
+  onExportPDF,
+  exportDisabled,
+}: NavbarProps) => {
+  const [exportOpen, setExportOpen] = useState(false);
+  const exportRef = useRef<HTMLDivElement>(null);
+
+  useClickOutside(exportRef, () => setExportOpen(false));
   return (
     <header
       className="
@@ -203,6 +217,127 @@ const Navbar = ({ onMenuClick }: NavbarProps) => {
           >
             React • FastAPI • Groq
           </div>
+
+          {(onExportMarkdown || onExportPDF) && (
+            <div className="relative shrink-0" ref={exportRef}>
+              <button
+                onClick={() => setExportOpen((v) => !v)}
+                disabled={exportDisabled}
+                className="
+                  flex
+                  h-10
+                  w-10
+
+                  sm:h-11
+                  sm:w-11
+
+                  items-center
+                  justify-center
+
+                  rounded-xl
+
+                  border
+                  border-(--border-color)
+
+                  bg-(--bg-card)
+
+                  text-(--text-primary)
+
+                  transition-all
+                  duration-300
+
+                  hover:bg-blue-500/10
+
+                  disabled:opacity-40
+                  disabled:pointer-events-none
+                "
+                aria-label="Export conversation"
+              >
+                <Download size={18} />
+              </button>
+
+              {exportOpen && (
+                <div
+                  className="
+                    absolute
+                    right-0
+                    top-13
+
+                    z-50
+
+                    w-48
+
+                    overflow-hidden
+
+                    rounded-2xl
+
+                    border
+                    border-(--border-color)
+
+                    bg-(--bg-card)
+
+                    shadow-2xl
+
+                    backdrop-blur-xl
+                  "
+                >
+                  <button
+                    onClick={() => {
+                      onExportMarkdown?.();
+                      setExportOpen(false);
+                    }}
+                    className="
+                      flex
+                      w-full
+                      items-center
+                      gap-3
+
+                      px-4
+                      py-3
+
+                      text-sm
+                      text-(--text-primary)
+
+                      transition
+
+                      hover:bg-black/10
+                      dark:hover:bg-white/10
+                    "
+                  >
+                    <FileText size={16} />
+                    Export as Markdown
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      onExportPDF?.();
+                      setExportOpen(false);
+                    }}
+                    className="
+                      flex
+                      w-full
+                      items-center
+                      gap-3
+
+                      px-4
+                      py-3
+
+                      text-sm
+                      text-(--text-primary)
+
+                      transition
+
+                      hover:bg-black/10
+                      dark:hover:bg-white/10
+                    "
+                  >
+                    <FileDown size={16} />
+                    Export as PDF
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
 
           <div className="shrink-0">
             <ThemeToggle />
