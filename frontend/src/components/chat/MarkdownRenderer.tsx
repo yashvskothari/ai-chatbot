@@ -6,9 +6,13 @@ import CodeBlock from "./CodeBlock";
 
 interface Props {
   content: string;
+  pdf?: boolean;
 }
 
-const MarkdownRenderer = ({ content }: Props) => {
+const MarkdownRenderer = ({
+  content,
+  pdf = false,
+}: Props) => {
   return (
     <ReactMarkdown
       remarkPlugins={[remarkGfm]}
@@ -131,38 +135,67 @@ p: ({ children }) => (
           <em className="italic text-(--text-primary)">{children}</em>
         ),
 
-        code({ children, className, ...props }) {
-          const match = /language-(\w+)/.exec(className || "");
+code({
+  children,
+  className,
+  ...props
+}) {
+  const match =
+    /language-(\w+)/.exec(
+      className || ""
+    );
 
-          if (!match) {
-            return (
-              <code
-                className="
-        
-rounded-md
-bg-slate-200
-dark:bg-slate-800
-px-2
-py-1
-font-mono
-text-[0.92em]
-text-pink-600
-dark:text-pink-300
-"
-                {...props}
-              >
-                {children}
-              </code>
-            );
-          }
+  // Inline Code
+  if (!match) {
+    return (
+      <code
+        className="
+          rounded-md
+          bg-black/10
+          dark:bg-white/10
+          px-1.5
+          py-0.5
+          text-sm
+        "
+        {...props}
+      >
+        {children}
+      </code>
+    );
+  }
 
-          return (
-            <CodeBlock
-              language={match[1]}
-              code={String(children).replace(/\n$/, "")}
-            />
-          );
-        },
+  const code = String(children).replace(/\n$/, "");
+
+  // PDF Mode
+  if (pdf) {
+    return (
+      <pre
+        style={{
+          background: "#111827",
+          color: "#f9fafb",
+          padding: "16px",
+          borderRadius: "10px",
+          overflowX: "auto",
+          fontSize: "14px",
+          lineHeight: "1.6",
+          margin: "18px 0",
+        }}
+      >
+        <code>
+          {code}
+        </code>
+      </pre>
+    );
+  }
+
+  // Chat Mode
+  return (
+    <CodeBlock
+      language={match[1]}
+      code={code}
+    />
+  );
+},
       }}
     >
       {content}

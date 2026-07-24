@@ -9,7 +9,7 @@ import type { ChatInputHandle } from "../components/chat/ChatInput";
 import { streamChatMessage } from "../services/api";
 import { useConversations } from "../hooks/useConversations";
 import { exportToMarkdown, exportToPDF } from "../utils/export";
-import ExportDocument from "../components/export/ExportDocument";
+// import ExportDocument from "../components/export/ExportDocument";
 
 import type { Message, MessageAttachment } from "../types/chat";
 import type { PendingAttachment } from "../types/attachment";
@@ -261,19 +261,19 @@ const ChatPage = () => {
       </div>
     </div>
   );
-  const exportRef = useRef<HTMLDivElement>(null);
-  <div
-    ref={exportRef}
-    style={{
-        position: "fixed",
-        left: "-99999px",
-        top: 0
-    }}
->
-    <ExportDocument
-        conversation={activeConversation}
-    />
-</div>
+  // const exportRef = useRef<HTMLDivElement>(null);
+//   <div
+//     ref={exportRef}
+//     style={{
+//         position: "fixed",
+//         left: "-99999px",
+//         top: 0
+//     }}
+// >
+//     {/* <ExportDocument
+//         conversation={activeConversation}
+//     /> */}
+// </div>
 };
 
 export default ChatPage;
