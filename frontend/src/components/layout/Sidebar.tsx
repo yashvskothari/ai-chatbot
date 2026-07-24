@@ -5,6 +5,7 @@ import {
   MoreHorizontal,
   Pencil,
   Trash2,
+  Search,
 } from "lucide-react";
 
 import type { Conversation } from "../../types/conversation";
@@ -37,11 +38,26 @@ const Sidebar = ({
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   const [renameOpen, setRenameOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
-
+  const [searchQuery, setSearchQuery] = useState("");
   const [renameValue, setRenameValue] = useState("");
 
   const [selectedConversation, setSelectedConversation] =
     useState<Conversation | null>(null);
+    const filteredConversations = conversations.filter((conversation) => {
+  if (!searchQuery.trim()) return true;
+
+  const query = searchQuery.toLowerCase();
+
+  // Search title
+  if (conversation.title.toLowerCase().includes(query)) {
+    return true;
+  }
+
+  // Search messages
+  return conversation.messages.some((message) =>
+    message.content.toLowerCase().includes(query)
+  );
+});
   useEffect(() => {
     if (window.innerWidth >= 768) return;
 
@@ -142,27 +158,63 @@ const Sidebar = ({
           </button>
         </div>
 
-        {/* Heading */}
+        {/* Search */}
 
-        <div
-          className="
-          px-4
-          pb-2
+<div className="px-4 pb-4">
+  <div
+    className="
+      flex
+      items-center
+      gap-2
 
-          text-xs
-          uppercase
-          tracking-widest
+      rounded-xl
 
-          text-(--text-primary)
-        "
-        >
-          Conversations
-        </div>
+      border
+      border-(--border-color)
 
+      bg-(--bg-card)
+
+      px-3
+      py-2.5
+
+      transition-all
+      duration-300
+
+      focus-within:border-blue-500/40
+      focus-within:shadow-(--shadow-soft)
+    "
+  >
+    <Search
+      size={16}
+      className="text-(--text-secondary)"
+    />
+
+    <input
+      type="text"
+      value={searchQuery}
+      onChange={(e) => setSearchQuery(e.target.value)}
+      placeholder="Search conversations..."
+
+      className="
+        w-full
+
+        bg-transparent
+
+        text-sm
+
+        text-(--text-primary)
+
+        placeholder:text-(--text-secondary)
+
+        outline-none
+      "
+    />
+  </div>
+</div>
         {/* Conversation List */}
 
         <div className="flex-1 overflow-y-auto px-2 pb-4">
-          {conversations.length === 0 ? (
+          {filteredConversations.length === 0 ? (
             <div
               className="
               rounded-xl
@@ -173,10 +225,12 @@ const Sidebar = ({
               text-(--text-secondary)
             "
             >
-              No conversations yet.
+              {searchQuery
+  ? "No matching conversations found."
+  : "No conversations yet."}
             </div>
           ) : (
-            conversations.map((conversation) => (
+            filteredConversations.map((conversation) => (
               <div key={conversation.id} className="relative mb-2">
                 <button
                   onClick={() => {
