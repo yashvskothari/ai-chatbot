@@ -37,6 +37,7 @@ interface ChatInputProps {
   onSend: (message: string, attachments: PendingAttachment[]) => void;
   onStop: () => void;
   loading: boolean;
+  eidting?: boolean;
 }
 
 const MAX_CHARACTERS = 4000;
@@ -45,7 +46,7 @@ let localIdCounter = 0;
 const nextLocalId = () => `local-${Date.now()}-${localIdCounter++}`;
 
 const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(
-  ({ onSend, onStop, loading }, ref) => {
+  ({ onSend, onStop, loading = false }, ref) => {
     const [message, setMessage] = useState("");
     const [attachments, setAttachments] = useState<PendingAttachment[]>([]);
     const [isDragging, setIsDragging] = useState(false);
@@ -168,16 +169,12 @@ const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(
       });
     };
 
-    const hasPendingUploads = attachments.some(
-      (a) => a.status === "uploading",
-    );
+    const hasPendingUploads = attachments.some((a) => a.status === "uploading");
 
     const handleSend = () => {
       if (loading || hasPendingUploads) return;
 
-      const readyAttachments = attachments.filter(
-        (a) => a.status === "ready",
-      );
+      const readyAttachments = attachments.filter((a) => a.status === "ready");
 
       if (!message.trim() && readyAttachments.length === 0) return;
 

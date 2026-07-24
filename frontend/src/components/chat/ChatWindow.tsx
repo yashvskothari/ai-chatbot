@@ -3,6 +3,7 @@ import {
   FileText,
   Brain,
   Search,
+
 } from "lucide-react";
 import logo from "../../assets/logo.png";
 
@@ -17,6 +18,9 @@ interface Props {
   messages: Message[];
   loading: boolean;
   onSuggestionClick?: (prompt: string) => void;
+
+  onEditMessage?: (message: Message) => void;
+  onRegenerate?: (message: Message) => void;
 }
 
 const SUGGESTIONS = [
@@ -56,6 +60,8 @@ const ChatWindow = ({
   messages,
   loading,
   onSuggestionClick,
+  onEditMessage,
+  onRegenerate,
 }: Props) => {
 const { containerRef, bottomRef } = useAutoScroll([
   messages,
@@ -268,6 +274,8 @@ lg:gap-5
               <ChatMessage
                 key={message.id}
                 message={message}
+                onEdit={onEditMessage}
+                onRegenerate={onRegenerate}
               />
 
             ))}

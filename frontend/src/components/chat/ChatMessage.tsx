@@ -1,25 +1,44 @@
-import { Bot, User, FileText, ImageIcon } from "lucide-react";
+import { useState } from "react";
+import { Bot, User, FileText, ImageIcon, Copy, Check, Pencil, RotateCcw, } from "lucide-react";
 import { Card } from "../ui";
 import type { Message } from "../../types/chat";
 import MarkdownRenderer from "./MarkdownRenderer";
 
 interface Props {
   message: Message;
+  onEdit?: (message: Message) => void;
+  onRegenerate?: (message: Message) => void;
 }
 
-const ChatMessage = ({ message }: Props) => {
+const ChatMessage = ({
+  message,
+  onEdit,
+  onRegenerate
+}: Props) => {
+  const [copied, setCopied] = useState(false);
   const isUser = message.role === "user";
 
   const currentTime = new Date().toLocaleTimeString([], {
     hour: "2-digit",
     minute: "2-digit",
   });
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(message.content);
+
+      setCopied(true);
+
+      setTimeout(() => {
+        setCopied(false);
+      }, 2000);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <div
-      className={`flex ${
-        isUser ? "justify-end" : "justify-start"
-      }
+      className={`flex ${isUser ? "justify-end" : "justify-start"}
       
     animate-in
     fade-in
@@ -77,24 +96,17 @@ sm:w-10
           `}
         >
           {isUser ? (
-            <User
-  size={16}
-  className="sm:size-4.5"
-/>
+            <User size={16} className="sm:size-4.5" />
           ) : (
-            <Bot
-  size={16}
-  className="sm:size-4.5"
-/>
+            <Bot size={16} className="sm:size-4.5" />
           )}
         </div>
 
         {/* Message */}
 
         <div className="flex flex-col">
-
-<Card
-  className={`
+          <Card
+            className={`
     rounded-2xl
 
 lg:rounded-[26px]
@@ -162,7 +174,7 @@ to-blue-50
         `
     }
   `}
->
+          >
             {message.attachments && message.attachments.length > 0 && (
               <div className="mb-3 flex flex-wrap gap-2">
                 {message.attachments.map((attachment) => (
@@ -213,18 +225,139 @@ to-blue-50
             {message.streaming && (
               <span
                 className="
-                  ml-0.5
-                  inline-block
-                  h-4
-                  w-2px
-                  translate-y-0.5
-                  animate-pulse
-                  bg-current
-                "
-              />
+      inline-block
+      ml-1
+
+      text-blue-500
+      dark:text-cyan-400
+
+      animate-pulse
+
+      select-none
+    "
+              >
+                ▋
+              </span>
             )}
           </Card>
 
+<div
+  className="
+    mt-2
+    flex
+    items-center
+    gap-2
+  "
+>
+  {/* Assistant actions */}
+
+  {!isUser && (
+    <button
+      onClick={handleCopy}
+      className="
+        flex
+        items-center
+        gap-1.5
+
+        rounded-lg
+
+        px-2
+        py-1
+
+        text-xs
+
+        text-slate-500
+        dark:text-slate-400
+
+        transition-all
+        duration-200
+
+        hover:bg-slate-100
+        dark:hover:bg-slate-800
+
+        hover:text-blue-600
+      "
+    >
+      {copied ? (
+        <>
+          <Check size={14} />
+          Copied
+        </>
+      ) : (
+        <>
+          <Copy size={14} />
+          Copy
+        </>
+      )}
+    </button>
+  )}
+
+{!isUser && onRegenerate && (
+  <button
+    onClick={() => onRegenerate(message)}
+    className="
+      flex
+      items-center
+      gap-1.5
+
+      rounded-lg
+
+      px-2
+      py-1
+
+      text-xs
+
+      text-slate-500
+      dark:text-slate-400
+
+      transition-all
+      duration-200
+
+      hover:bg-slate-100
+      dark:hover:bg-slate-800
+
+      hover:text-violet-600
+    "
+  >
+    <RotateCcw size={14} />
+    Regenerate
+  </button>
+)}
+
+  {/* User actions */}
+
+  {isUser && onEdit && (
+    <button
+      onClick={() => onEdit(message)}
+      className="
+        flex
+        items-center
+        gap-1.5
+
+        rounded-lg
+
+        px-2
+        py-1
+
+        text-xs
+
+        text-slate-500
+        dark:text-slate-400
+
+        transition-all
+        duration-200
+
+        hover:bg-slate-100
+        dark:hover:bg-slate-800
+
+        hover:text-emerald-600
+      "
+    >
+      <Pencil size={14} />
+      Edit
+    </button>
+  )}
+</div>
           <span
             className={`
           mt-1.5
@@ -236,16 +369,11 @@ sm:mt-2
 
               text-(--text)
 
-              ${
-                isUser
-                  ? "text-right"
-                  : "text-left"
-              }
+              ${isUser ? "text-right" : "text-left"}
             `}
           >
             {currentTime}
           </span>
-
         </div>
       </div>
     </div>

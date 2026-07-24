@@ -19,6 +19,7 @@ const MAX_HISTORY_MESSAGES = 20;
 
 const ChatPage = () => {
   const [loading, setLoading] = useState(false);
+  const [editingMessageId, setEditingMessageId] = useState<number | null>(null);
 
   const abortControllerRef = useRef<AbortController | null>(null);
 
@@ -38,11 +39,48 @@ const ChatPage = () => {
   } = useConversations();
 
   const inputRef = useRef<ChatInputHandle>(null);
-  
+  const handleEditMessage = (message: Message) => {
+    setEditingMessageId(message.id);
+
+    inputRef.current?.setMessage(message.content);
+
+    inputRef.current?.focus();
+  };
+  const handleRegenerate = (assistantMessage: Message) => {
+
+  if (!activeConversation) return;
+
+  const assistantIndex =
+    activeConversation.messages.findIndex(
+      (m) => m.id === assistantMessage.id
+    );
+
+  if (assistantIndex <= 0) return;
+
+  const userMessage =
+    activeConversation.messages[assistantIndex - 1];
+
+  if (userMessage.role !== "user") return;
+
+  updateMessages(
+    activeConversation.messages.slice(
+      0,
+      assistantIndex - 1
+    )
+  );
+
+  sendMessage(
+    userMessage.content,
+    []
+  );
+};
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "/" && document.activeElement !== inputRef.current?.getElement()) {
+      if (
+        e.key === "/" &&
+        document.activeElement !== inputRef.current?.getElement()
+      ) {
         e.preventDefault();
         inputRef.current?.focus();
       }
@@ -70,8 +108,24 @@ const ChatPage = () => {
     inputRef.current?.focus();
   };
 
-  const sendMessage = async (text: string, attachments: PendingAttachment[]) => {
+  const sendMessage = async (
+    text: string,
+    attachments: PendingAttachment[],
+  ) => {
     if (!activeConversation) return;
+    let workingMessages = [...activeConversation.messages];
+
+if (editingMessageId !== null) {
+  const editIndex = workingMessages.findIndex(
+    (m) => m.id === editingMessageId,
+  );
+
+  if (editIndex !== -1) {
+    workingMessages = workingMessages.slice(0, editIndex);
+  }
+
+  setEditingMessageId(null);
+}
     if (!text.trim() && attachments.length === 0) return;
 
     // Attachments to display on this specific message bubble.
@@ -136,7 +190,10 @@ const ChatPage = () => {
       streaming: true,
     };
 
-    let updatedMessages = [...activeConversation.messages, userMessage];
+    let updatedMessages = [
+  ...workingMessages,
+  userMessage,
+];
     updateMessages(updatedMessages);
 
     setLoading(true);
@@ -227,7 +284,9 @@ const ChatPage = () => {
         onMenuClick={() => setSidebarOpen(true)}
         onExportMarkdown={handleExportMarkdown}
         onExportPDF={handleExportPDF}
-        exportDisabled={!activeConversation || activeConversation.messages.length === 0}
+        exportDisabled={
+          !activeConversation || activeConversation.messages.length === 0
+        }
       />
 
       <div className="flex flex-1 overflow-hidden">
@@ -247,6 +306,9 @@ const ChatPage = () => {
             messages={activeConversation?.messages ?? []}
             loading={loading}
             onSuggestionClick={handleSuggestionClick}
+            onEditMessage={handleEditMessage}
+            onRegenerate={handleRegenerate}
+
           />
 
           <div className="border-t-2 border-(--border-color)">
@@ -262,18 +324,18 @@ const ChatPage = () => {
     </div>
   );
   // const exportRef = useRef<HTMLDivElement>(null);
-//   <div
-//     ref={exportRef}
-//     style={{
-//         position: "fixed",
-//         left: "-99999px",
-//         top: 0
-//     }}
-// >
-//     {/* <ExportDocument
-//         conversation={activeConversation}
-//     /> */}
-// </div>
+  //   <div
+  //     ref={exportRef}
+  //     style={{
+  //         position: "fixed",
+  //         left: "-99999px",
+  //         top: 0
+  //     }}
+  // >
+  //     {/* <ExportDocument
+  //         conversation={activeConversation}
+  //     /> */}
+  // </div>
 };
 
 export default ChatPage;
