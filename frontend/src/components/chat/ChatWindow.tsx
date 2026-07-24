@@ -1,10 +1,4 @@
-import {
-  Code2,
-  FileText,
-  Brain,
-  Search,
-
-} from "lucide-react";
+import { Code2, FileText, Brain, Search } from "lucide-react";
 import logo from "../../assets/logo.png";
 
 import type { Message } from "../../types/chat";
@@ -37,8 +31,7 @@ const SUGGESTIONS = [
     color: "text-emerald-400",
     title: "Summarize Documents",
     description: "Extract insights from PDFs, reports and notes.",
-    prompt:
-      "Please summarize the key points of the document I've attached.",
+    prompt: "Please summarize the key points of the document I've attached.",
   },
   {
     icon: Brain,
@@ -63,14 +56,23 @@ const ChatWindow = ({
   onEditMessage,
   onRegenerate,
 }: Props) => {
-const { containerRef, bottomRef } = useAutoScroll([
+const {
+  containerRef,
+  bottomRef,
+
+  showScrollButton,
+
+  scrollToBottom,
+
+
+} = useAutoScroll([
   messages,
   loading,
 ]);
   return (
-  <main
-  ref={containerRef}
-  className="
+    <main
+      ref={containerRef}
+      className="
     flex-1
     overflow-y-auto
 
@@ -88,13 +90,13 @@ lg:py-8
     transition-colors
     duration-300
   "
->
-      <div className="mx-auto max-w-full
+    >
+      <div
+        className="mx-auto max-w-full
 
-xl:max-w-5xl">
-
+xl:max-w-5xl"
+      >
         {messages.length === 0 && !loading ? (
-
           <div
             className="
               flex
@@ -107,7 +109,6 @@ lg:min-h-[70vh]
               text-center
             "
           >
-
             {/* Logo */}
 
             <div
@@ -137,17 +138,17 @@ lg:w-20
                 shadow-blue-500/30
               "
             >
-               <img
-              src={logo}
-              alt="Flux AI"
-              className="h-20 w-20 scale-120 object-contain"
-            />
+              <img
+                src={logo}
+                alt="Flux AI"
+                className="h-20 w-20 scale-120 object-contain"
+              />
             </div>
 
             {/* Heading */}
 
-          <h1
-  className="
+            <h1
+              className="
     text-2xl
 
 sm:text-3xl
@@ -160,7 +161,7 @@ lg:text-4xl
 
     transition-colors
   "
->
+            >
               How can I help today?
             </h1>
 
@@ -175,9 +176,8 @@ lg:max-w-xl
                 text-slate-500 dark:text-slate-400
               "
             >
-              Ask questions, generate code,
-              summarize documents,
-              analyze data, or brainstorm ideas.
+              Ask questions, generate code, summarize documents, analyze data,
+              or brainstorm ideas.
             </p>
 
             {/* Suggestion Cards */}
@@ -254,44 +254,83 @@ lg:gap-5
                 );
               })}
             </div>
-
           </div>
-
         ) : (
-
           <div
-  className="
+            className="
     space-y-8
 
     animate-in
     fade-in
     duration-300
   "
->
-
+          >
             {messages.map((message) => (
-
               <ChatMessage
                 key={message.id}
                 message={message}
                 onEdit={onEditMessage}
                 onRegenerate={onRegenerate}
               />
-
             ))}
 
             {loading && messages[messages.length - 1]?.role !== "assistant" && (
               <TypingIndicator />
             )}
+{showScrollButton && (
+  <button
+    onClick={scrollToBottom}
+className={`
+fixed
+bottom-34
+right-8
+z-50
+
+flex
+items-center
+gap-2
+
+rounded-full
+
+bg-slate-900
+dark:bg-slate-700
+
+px-4
+py-2.5
+
+text-sm
+font-medium
+
+text-white
+
+shadow-xl
+
+transition-all
+duration-300
+
+hover:bg-blue-600
+hover:scale-105
+
+animate-in
+fade-in
+slide-in-from-bottom-2
+
+${loading ? "animate-pulse" : ""}
+`}
+  >
+
+    <span>
+      {loading
+        ? "New responses"
+        : "Scroll to latest"}
+    </span>
+  </button>
+)}
 
             <div ref={bottomRef} />
-
           </div>
-
         )}
-
       </div>
-
     </main>
   );
 };
