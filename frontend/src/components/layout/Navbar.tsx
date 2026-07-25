@@ -6,19 +6,28 @@ import {
   FileDown,
   ChevronDown,
   Cpu,
+  Volume2,
 } from "lucide-react";
 
+import { VOICES } from "../../constants/voices";
 import { useModel } from "../../hooks/useModel";
 import { MODELS } from "../../constants/models";
 import logo from "../../assets/logo.png";
 import ThemeToggle from "../ui/ThemeToggle";
 import { useClickOutside } from "../../hooks/useClickOutside";
+import type { VoiceOption } from "../../constants/voices";
 
 interface NavbarProps {
   onMenuClick: () => void;
   onExportMarkdown?: () => void;
   onExportPDF?: () => void;
   exportDisabled?: boolean;
+
+  voiceEnabled: boolean;
+  onToggleVoice: () => void;
+
+  selectedVoice: VoiceOption;
+  onVoiceChange: (voice: VoiceOption) => void;
 }
 
 const Navbar = ({
@@ -26,9 +35,20 @@ const Navbar = ({
   onExportMarkdown,
   onExportPDF,
   exportDisabled,
+
+  voiceEnabled,
+  onToggleVoice,
+
+  selectedVoice,
+  onVoiceChange,
 }: NavbarProps) => {
   const [exportOpen, setExportOpen] = useState(false);
   const [modelOpen, setModelOpen] = useState(false);
+  const [voiceOpen, setVoiceOpen] = useState(false);
+
+  const voiceRef = useRef<HTMLDivElement>(null);
+
+  useClickOutside(voiceRef, () => setVoiceOpen(false));
 
   const modelRef = useRef<HTMLDivElement>(null);
 
@@ -203,13 +223,10 @@ const Navbar = ({
             lg:gap-4
           "
         >
-<div
-  className="relative hidden md:block"
-  ref={modelRef}
->
-  <button
-    onClick={() => setModelOpen(!modelOpen)}
-    className="
+          <div className="relative hidden md:block" ref={modelRef}>
+            <button
+              onClick={() => setModelOpen(!modelOpen)}
+              className="
       flex
       items-center
       gap-2
@@ -232,22 +249,20 @@ const Navbar = ({
 
       hover:border-blue-500/40
     "
-  >
-    <Cpu size={16} />
+            >
+              <Cpu size={16} />
 
-    {selectedModel.name}
+              {selectedModel.name}
 
-    <ChevronDown
-      size={16}
-      className={`transition ${
-        modelOpen ? "rotate-180" : ""
-      }`}
-    />
-  </button>
+              <ChevronDown
+                size={16}
+                className={`transition ${modelOpen ? "rotate-180" : ""}`}
+              />
+            </button>
 
-  {modelOpen && (
-    <div
-      className="
+            {modelOpen && (
+              <div
+                className="
         absolute
         right-0
         mt-2
@@ -269,15 +284,15 @@ const Navbar = ({
 
         z-50
       "
-    >
-      {MODELS.map((model) => (
-        <button
-          key={model.id}
-          onClick={() => {
-            setSelectedModel(model);
-            setModelOpen(false);
-          }}
-          className={`
+              >
+                {MODELS.map((model) => (
+                  <button
+                    key={model.id}
+                    onClick={() => {
+                      setSelectedModel(model);
+                      setModelOpen(false);
+                    }}
+                    className={`
             w-full
 
             px-4
@@ -289,31 +304,25 @@ const Navbar = ({
 
             hover:bg-blue-500/10
 
-            ${
-              selectedModel.id === model.id
-                ? "bg-blue-500/10"
-                : ""
-            }
+            ${selectedModel.id === model.id ? "bg-blue-500/10" : ""}
           `}
-        >
-          <div className="font-medium">
-            {model.name}
-          </div>
+                  >
+                    <div className="font-medium">{model.name}</div>
 
-          <div
-            className="
+                    <div
+                      className="
               text-xs
 
               text-(--text-secondary)
             "
-          >
-            {model.description}
+                    >
+                      {model.description}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
-        </button>
-      ))}
-    </div>
-  )}
-</div>
 
           {(onExportMarkdown || onExportPDF) && (
             <div className="relative shrink-0" ref={exportRef}>
@@ -436,9 +445,188 @@ const Navbar = ({
             </div>
           )}
 
-          <div className="shrink-0">
-            <ThemeToggle />
+          <div
+            className="
+    hidden
+    md:flex
+
+    items-center
+    gap-3
+
+    rounded-full
+
+    border
+    border-(--border-color)
+
+    bg-(--bg-card)
+
+    px-4
+    py-2
+  "
+          >
+            <Volume2
+              size={18}
+              className={voiceEnabled ? "text-blue-500" : "text-slate-400"}
+            />
+
+            <span
+              className="
+      text-sm
+      text-(--text-primary)
+    "
+            >
+              Voice
+            </span>
+
+            <button
+              onClick={onToggleVoice}
+              className={`
+      relative
+
+      h-6
+      w-11
+
+      rounded-full
+
+      transition-all
+      duration-300
+
+      ${voiceEnabled ? "bg-blue-600" : "bg-slate-400"}
+    `}
+            >
+              <span
+                className={`
+        absolute
+
+        top-0.5
+        left-0.5
+
+        h-5
+        w-5
+
+        rounded-full
+
+        bg-white
+
+        transition-all
+        duration-300
+
+        ${voiceEnabled ? "translate-x-5" : ""}
+      `}
+              />
+            </button>
+            
           </div>
+          <div className="relative ml-2" ref={voiceRef}>
+  <button
+    onClick={() => setVoiceOpen((v) => !v)}
+    disabled={!voiceEnabled}
+    className="
+      flex
+      items-center
+      gap-2
+
+      rounded-lg
+
+      border
+      border-(--border-color)
+
+      bg-(--bg-secondary)
+
+      px-3
+      py-1.5
+
+      text-sm
+
+      transition-all
+
+      hover:bg-blue-500/10
+
+      disabled:opacity-50
+      disabled:cursor-not-allowed
+    "
+  >
+    {selectedVoice.name}
+
+    <ChevronDown
+      size={15}
+      className={`transition ${voiceOpen ? "rotate-180" : ""}`}
+    />
+  </button>
+
+  {voiceOpen && (
+    <div
+      className="
+        absolute
+
+        right-0
+        top-11
+
+        z-50
+
+        w-52
+
+        overflow-hidden
+
+        rounded-xl
+
+        border
+        border-(--border-color)
+
+        bg-(--bg-card)
+
+        shadow-xl
+      "
+    >
+      {VOICES.map((voice) => (
+        <button
+          key={voice.id}
+          onClick={() => {
+            onVoiceChange(voice);
+            setVoiceOpen(false);
+          }}
+          className="
+            flex
+
+            w-full
+
+            items-center
+
+            justify-between
+
+            px-4
+            py-3
+
+            text-left
+
+            hover:bg-blue-500/10
+
+            transition
+          "
+        >
+          <div>
+            <div>{voice.name}</div>
+
+            <div className="text-xs text-slate-400">
+              {voice.gender}
+            </div>
+          </div>
+
+          {selectedVoice.id === voice.id && (
+            <span className="text-blue-500">✓</span>
+          )}
+        </button>
+      ))}
+    </div>
+  )}
+</div>
+          
+          <div className="shrink-0">
+            
+            <ThemeToggle />
+            
+          </div>
+          
         </div>
       </div>
     </header>

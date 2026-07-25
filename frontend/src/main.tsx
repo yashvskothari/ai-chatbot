@@ -1,7 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { ClerkProvider } from "@clerk/clerk-react";
-
 import "highlight.js/styles/github-dark.css";
 
 import App from "./App";
@@ -12,16 +11,22 @@ import "@fontsource/geist-sans";
 
 import "./styles/globals.css";
 import { ModelProvider } from "./context/ModelProvider";
-
+import { VoiceProvider } from "./context/VoiceProvider";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
     <ThemeProvider>
-      <ModelProvider>
-      <App />
-      </ModelProvider>
+<ModelProvider>
+
+<VoiceProvider>
+
+<App/>
+
+</VoiceProvider>
+
+</ModelProvider>
     </ThemeProvider>
     </ClerkProvider>
   </StrictMode>

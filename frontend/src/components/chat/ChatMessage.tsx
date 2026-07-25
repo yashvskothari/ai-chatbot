@@ -1,19 +1,40 @@
 import { useState } from "react";
-import { Bot, User, FileText, ImageIcon, Copy, Check, Pencil, RotateCcw, } from "lucide-react";
+import {
+  Bot,
+  User,
+  FileText,
+  ImageIcon,
+  Copy,
+  Check,
+  Pencil,
+  RotateCcw,
+  Volume2,
+  Square,
+} from "lucide-react";
 import { Card } from "../ui";
 import type { Message } from "../../types/chat";
 import MarkdownRenderer from "./MarkdownRenderer";
 
 interface Props {
   message: Message;
+
   onEdit?: (message: Message) => void;
   onRegenerate?: (message: Message) => void;
+
+  onSpeak?: (message: Message) => void;
+  onStopSpeaking?: () => void;
+
+  speaking?: boolean;
+  voiceEnabled?: boolean;
 }
 
 const ChatMessage = ({
   message,
   onEdit,
-  onRegenerate
+  onRegenerate,
+  onSpeak,
+  onStopSpeaking,
+  speaking,
 }: Props) => {
   const [copied, setCopied] = useState(false);
   const isUser = message.role === "user";
@@ -241,20 +262,20 @@ to-blue-50
             )}
           </Card>
 
-<div
-  className="
+          <div
+            className="
     mt-2
     flex
     items-center
     gap-2
   "
->
-  {/* Assistant actions */}
+          >
+            {/* Assistant actions */}
 
-  {!isUser && (
-    <button
-      onClick={handleCopy}
-      className="
+            {!isUser && (
+              <button
+                onClick={handleCopy}
+                className="
         flex
         items-center
         gap-1.5
@@ -277,25 +298,70 @@ to-blue-50
 
         hover:text-blue-600
       "
-    >
-      {copied ? (
-        <>
-          <Check size={14} />
-          Copied
-        </>
-      ) : (
-        <>
-          <Copy size={14} />
-          Copy
-        </>
-      )}
-    </button>
-  )}
+              >
+                {copied ? (
+                  <>
+                    <Check size={14} />
+                    Copied
+                  </>
+                ) : (
+                  <>
+                    <Copy size={14} />
+                    Copy
+                  </>
+                )}
+              </button>
+            )}
+            <button
+              onClick={() => {
+                if (speaking) {
+                  onStopSpeaking?.();
+                } else {
+                  onSpeak?.(message);
+                }
+              }}
+              className="
+    flex
+    items-center
+    gap-1.5
 
-{!isUser && onRegenerate && (
-  <button
-    onClick={() => onRegenerate(message)}
-    className="
+    rounded-lg
+
+    px-2
+    py-1
+
+    text-xs
+
+    text-slate-500
+    dark:text-slate-400
+
+    transition-all
+    duration-200
+
+    hover:bg-slate-100
+    dark:hover:bg-slate-800
+
+    hover:text-emerald-600
+  "
+            >
+              {speaking ? (
+                <>
+                  <Square size={14} />
+                  Stop
+                </>
+              ) : (
+                <>
+                  <Volume2 size={14} />
+                  Speak
+                </>
+              )}
+            </button>
+            
+
+            {!isUser && onRegenerate && (
+              <button
+                onClick={() => onRegenerate(message)}
+                className="
       flex
       items-center
       gap-1.5
@@ -318,18 +384,18 @@ to-blue-50
 
       hover:text-violet-600
     "
-  >
-    <RotateCcw size={14} />
-    Regenerate
-  </button>
-)}
+              >
+                <RotateCcw size={14} />
+                Regenerate
+              </button>
+            )}
 
-  {/* User actions */}
+            {/* User actions */}
 
-  {isUser && onEdit && (
-    <button
-      onClick={() => onEdit(message)}
-      className="
+            {isUser && onEdit && (
+              <button
+                onClick={() => onEdit(message)}
+                className="
         flex
         items-center
         gap-1.5
@@ -352,12 +418,12 @@ to-blue-50
 
         hover:text-emerald-600
       "
-    >
-      <Pencil size={14} />
-      Edit
-    </button>
-  )}
-</div>
+              >
+                <Pencil size={14} />
+                Edit
+              </button>
+            )}
+          </div>
           <span
             className={`
           mt-1.5

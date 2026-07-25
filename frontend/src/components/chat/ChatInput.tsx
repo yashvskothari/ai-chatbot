@@ -1,3 +1,6 @@
+import { Mic, MicOff } from "lucide-react";
+import { useSpeechRecognition } from "../../hooks/useSpeechRecognition";
+
 import {
   useState,
   useEffect,
@@ -17,6 +20,7 @@ import {
   UploadCloud,
 } from "lucide-react";
 
+import { useModel } from "../../hooks/useModel";
 import { Button } from "../ui";
 import { uploadFile } from "../../services/api";
 import {
@@ -50,10 +54,14 @@ const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(
     const [message, setMessage] = useState("");
     const [attachments, setAttachments] = useState<PendingAttachment[]>([]);
     const [isDragging, setIsDragging] = useState(false);
-
+    const { selectedModel } = useModel();
     const fileInputRef = useRef<HTMLInputElement>(null);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const dragCounter = useRef(0);
+    const { startListening, stopListening, isListening, supported } =
+      useSpeechRecognition((text) => {
+        setMessage(text);
+      });
 
     useImperativeHandle(ref, () => ({
       focus: () => textareaRef.current?.focus(),
@@ -122,8 +130,12 @@ const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(
         },
       ]);
 
-      uploadFile(file)
-        .then((result) => {
+uploadFile(
+  file,
+  selectedModel.provider,
+  selectedModel.id,
+)
+  .then((result) => {
           setAttachments((prev) =>
             prev.map((a) =>
               a.localId === localId
@@ -150,7 +162,7 @@ const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(
             ),
           );
         });
-    }, []);
+    }, [selectedModel]);
 
     const handleFiles = useCallback(
       (files: FileList | File[]) => {
@@ -421,7 +433,9 @@ lg:rounded-[30px]
             placeholder={
               loading ? "Flux AI is thinking..." : "Message Flux AI..."
             }
-            onChange={(e) => setMessage(e.target.value)}
+            onChange={(e) => {
+              setMessage(e.target.value);
+            }}
             onKeyDown={(e) => {
               if (e.key === "Enter" && e.ctrlKey) {
                 e.preventDefault();
@@ -497,6 +511,33 @@ sm:p-2.5
               >
                 <Paperclip size={18} />
               </button>
+              {supported && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (isListening) {
+                      stopListening();
+                    } else {
+                      startListening();
+                    }
+                  }}
+                  className={`
+      rounded-xl
+      p-2
+      sm:p-2.5
+      transition-all
+      duration-300
+
+      ${
+        isListening
+          ? "bg-red-500 text-white animate-pulse"
+          : "text-(--text-secondary) hover:bg-blue-500/10 hover:text-blue-500"
+      }
+    `}
+                >
+                  {isListening ? <MicOff size={18} /> : <Mic size={18} />}
+                </button>
+              )}
             </div>
 
             {/* Right */}

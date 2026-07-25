@@ -1,14 +1,15 @@
 import { useEffect, useRef, useState } from "react";
-import { useModel } from "../hooks/useModel";
 import Navbar from "../components/layout/Navbar";
 import Sidebar from "../components/layout/Sidebar";
 import ChatWindow from "../components/chat/ChatWindow";
 import ChatInput from "../components/chat/ChatInput";
 import type { ChatInputHandle } from "../components/chat/ChatInput";
-
+import { cleanMarkdown } from "../utils/cleanMarkdown";
+import { useSpeechSynthesis } from "../hooks/useSpeechSynthesis";
 import { streamChatMessage } from "../services/api";
 import { useConversations } from "../hooks/useConversations";
 import { exportToMarkdown, exportToPDF } from "../utils/export";
+import { VOICES } from "../constants/voices";
 // import ExportDocument from "../components/export/ExportDocument";
 
 import type { Message, MessageAttachment } from "../types/chat";
@@ -19,8 +20,19 @@ const MAX_HISTORY_MESSAGES = 20;
 
 const ChatPage = () => {
   const [loading, setLoading] = useState(false);
-  const [editingMessageId, setEditingMessageId] = useState<number | null>(null);
+  const [voiceEnabled, setVoiceEnabled] = useState(false);
 
+  const [editingMessageId, setEditingMessageId] = useState<number | null>(null);
+  const { speak, stop, speaking } = useSpeechSynthesis();
+  const [selectedVoice, setSelectedVoice] = useState(VOICES[0]);
+
+  const handleSpeak = (message: Message) => {
+    speak(cleanMarkdown(message.content));
+  };
+
+  const handleStopSpeaking = () => {
+    stop();
+  };
   const abortControllerRef = useRef<AbortController | null>(null);
 
   // Sidebar
@@ -37,8 +49,6 @@ const ChatPage = () => {
     renameConversation,
     addDocuments,
   } = useConversations();
-  const { selectedModel } = useModel();
-
   const inputRef = useRef<ChatInputHandle>(null);
   const handleEditMessage = (message: Message) => {
     setEditingMessageId(message.id);
@@ -66,6 +76,12 @@ const ChatPage = () => {
   };
 
   useEffect(() => {
+    if (!voiceEnabled) {
+      stop();
+    }
+  }, [voiceEnabled, stop]);
+
+  useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (
         e.key === "/" &&
@@ -89,6 +105,7 @@ const ChatPage = () => {
 
   const stopGeneration = () => {
     abortControllerRef.current?.abort();
+    stop();
     setLoading(false);
     inputRef.current?.focus();
   };
@@ -216,26 +233,33 @@ const ChatPage = () => {
       );
 
       updateMessages(updatedMessages);
+
+      const textToSpeak = finalContent ?? streamedContent;
+
+      if (textToSpeak.trim()) {
+        speak(textToSpeak);
+      }
+
       setLoading(false);
       abortControllerRef.current = null;
       inputRef.current?.focus();
     };
 
     await streamChatMessage(
-{
-  message: text,
+      {
+        message: text,
 
-  provider: selectedModel.provider,
-  model: selectedModel.id,
+        // provider: selectedModel.provider,
+        // model: selectedModel.id,
 
-  history: historyForRequest,
+        history: historyForRequest,
 
-  attachments: documentContext.map((d) => ({
-    filename: d.filename,
-    type: d.type,
-    content: d.content,
-  })),
-},
+        attachments: documentContext.map((d) => ({
+          filename: d.filename,
+          type: d.type,
+          content: d.content,
+        })),
+      },
       {
         onToken: applyToken,
         onDone: () => finish(),
@@ -279,6 +303,10 @@ const ChatPage = () => {
         exportDisabled={
           !activeConversation || activeConversation.messages.length === 0
         }
+        voiceEnabled={voiceEnabled}
+        onToggleVoice={() => setVoiceEnabled((v) => !v)}
+        selectedVoice={selectedVoice}
+        onVoiceChange={setSelectedVoice}
       />
 
       <div className="flex flex-1 overflow-hidden">
@@ -300,6 +328,10 @@ const ChatPage = () => {
             onSuggestionClick={handleSuggestionClick}
             onEditMessage={handleEditMessage}
             onRegenerate={handleRegenerate}
+            onSpeak={handleSpeak}
+            onStopSpeaking={handleStopSpeaking}
+            speaking={speaking}
+            voiceEnabled={voiceEnabled}
           />
 
           <div className="border-t-2 border-(--border-color)">

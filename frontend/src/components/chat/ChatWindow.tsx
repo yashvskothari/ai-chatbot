@@ -11,10 +11,17 @@ import { Card } from "../ui";
 interface Props {
   messages: Message[];
   loading: boolean;
+
   onSuggestionClick?: (prompt: string) => void;
 
   onEditMessage?: (message: Message) => void;
   onRegenerate?: (message: Message) => void;
+
+  onSpeak?: (message: Message) => void;
+  onStopSpeaking?: () => void;
+
+  speaking?: boolean;
+  voiceEnabled?: boolean;
 }
 
 const SUGGESTIONS = [
@@ -55,20 +62,19 @@ const ChatWindow = ({
   onSuggestionClick,
   onEditMessage,
   onRegenerate,
+  onSpeak,
+  onStopSpeaking,
+  voiceEnabled,
+  speaking,
 }: Props) => {
-const {
-  containerRef,
-  bottomRef,
+  const {
+    containerRef,
+    bottomRef,
 
-  showScrollButton,
+    showScrollButton,
 
-  scrollToBottom,
-
-
-} = useAutoScroll([
-  messages,
-  loading,
-]);
+    scrollToBottom,
+  } = useAutoScroll([messages, loading]);
   return (
     <main
       ref={containerRef}
@@ -271,16 +277,21 @@ lg:gap-5
                 message={message}
                 onEdit={onEditMessage}
                 onRegenerate={onRegenerate}
+                onSpeak={onSpeak}
+                onStopSpeaking={onStopSpeaking}
+                speaking={speaking}
+                voiceEnabled={voiceEnabled}
+                
               />
             ))}
 
             {loading && messages[messages.length - 1]?.role !== "assistant" && (
               <TypingIndicator />
             )}
-{showScrollButton && (
-  <button
-    onClick={scrollToBottom}
-className={`
+            {showScrollButton && (
+              <button
+                onClick={scrollToBottom}
+                className={`
 fixed
 bottom-34
 right-8
@@ -317,15 +328,10 @@ slide-in-from-bottom-2
 
 ${loading ? "animate-pulse" : ""}
 `}
-  >
-
-    <span>
-      {loading
-        ? "New responses"
-        : "Scroll to latest"}
-    </span>
-  </button>
-)}
+              >
+                <span>{loading ? "New responses" : "Scroll to latest"}</span>
+              </button>
+            )}
 
             <div ref={bottomRef} />
           </div>
