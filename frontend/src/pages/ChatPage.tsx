@@ -9,7 +9,7 @@ import { useSpeechSynthesis } from "../hooks/useSpeechSynthesis";
 import { streamChatMessage } from "../services/api";
 import { useConversations } from "../hooks/useConversations";
 import { exportToMarkdown, exportToPDF } from "../utils/export";
-import { VOICES } from "../constants/voices";
+import { useVoice } from "../hooks/useVoice";
 // import ExportDocument from "../components/export/ExportDocument";
 
 import type { Message, MessageAttachment } from "../types/chat";
@@ -23,11 +23,20 @@ const ChatPage = () => {
   const [voiceEnabled, setVoiceEnabled] = useState(false);
 
   const [editingMessageId, setEditingMessageId] = useState<number | null>(null);
-  const { speak, stop, speaking } = useSpeechSynthesis();
-  const [selectedVoice, setSelectedVoice] = useState(VOICES[0]);
+  const { selectedVoice } = useVoice();
+
+const {
+    speak,
+    stop,
+    speaking,
+} = useSpeechSynthesis(selectedVoice);
+  
 
   const handleSpeak = (message: Message) => {
-    speak(cleanMarkdown(message.content));
+
+    if(!voiceEnabled) return;
+    const cleaned = cleanMarkdown(message.content);
+    speak(cleaned);
   };
 
   const handleStopSpeaking = () => {
@@ -305,8 +314,6 @@ const ChatPage = () => {
         }
         voiceEnabled={voiceEnabled}
         onToggleVoice={() => setVoiceEnabled((v) => !v)}
-        selectedVoice={selectedVoice}
-        onVoiceChange={setSelectedVoice}
       />
 
       <div className="flex flex-1 overflow-hidden">

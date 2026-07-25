@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 
-import type { VoiceOption } from "../constants/voices";
 
 export function useSpeechSynthesis(
-  selectedVoice: VoiceOption
+  selectedVoice: SpeechSynthesisVoice | null
 ) {
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
@@ -14,18 +13,10 @@ export function useSpeechSynthesis(
 
     window.speechSynthesis.cancel();
 
-    const utterance = new SpeechSynthesisUtterance(text);
-    const voices = window.speechSynthesis.getVoices();
+const utterance = new SpeechSynthesisUtterance(text);
 
-const matchedVoice = voices.find(
-  (voice) =>
-    voice.name
-      .toLowerCase()
-      .includes(selectedVoice.id.toLowerCase())
-);
-
-if (matchedVoice) {
-  utterance.voice = matchedVoice;
+if (selectedVoice) {
+  utterance.voice = selectedVoice;
 }
 
     utterance.rate = 1;

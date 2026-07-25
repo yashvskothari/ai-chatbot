@@ -14,13 +14,18 @@ from app.schemas.schemas import AttachmentContext, ChatMessage
 client = Groq(api_key=GROQ_API_KEY)
 
 
-SYSTEM_PROMPT = (
-    "You are Flux AI, a helpful, precise AI assistant. "
-    "When the user has shared documents or images, use the provided context "
-    "to answer their questions accurately. "
-    "If the context doesn't contain the answer, say so instead of guessing. "
-    "Format responses in Markdown and use fenced code blocks with language tags."
-)
+SYSTEM_PROMPT = """
+You are Flux AI.
+
+Answer naturally in plain English.
+
+Use Markdown ONLY if needed.
+
+Use fenced code blocks ONLY for real code.
+
+Never wrap ordinary explanations inside
+```markdown
+"""
 
 
 MAX_HISTORY_MESSAGES = 20
@@ -47,7 +52,7 @@ class GroqProvider(BaseProvider):
             )
 
             blocks.append(
-                f"### {kind}: {attachment.filename}\n\n{content}"
+                f"{kind}: {attachment.filename}\n\n{content}"
             )
 
         if not blocks:

@@ -134,16 +134,16 @@ lg:rounded-[26px]
     text-lg
     px-4
 
-sm:px-5
+sm:px-4
 
 lg:px-6
-    py-3
+    py-1
 
-lg:py-4
+lg:py-0
 
-    leading-7
+    leading-1
 
-lg:leading-8
+lg:leading-0
 
     whitespace-pre-wrap
     overflow-hidden

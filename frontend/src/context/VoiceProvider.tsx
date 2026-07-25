@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-import { VOICES, type VoiceOption } from "../constants/voices";
 import { VoiceContext } from "./VoiceContext";
-
 
 export function VoiceProvider({
   children,
@@ -12,15 +10,12 @@ export function VoiceProvider({
     return localStorage.getItem("voiceEnabled") === "true";
   });
 
-  const [selectedVoice, setSelectedVoice] = useState(() => {
-    const saved = localStorage.getItem("voice");
+  const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
 
-    return (
-      VOICES.find((v) => v.id === saved) ??
-      VOICES[0]
-    );
-  });
+  const [selectedVoice, setSelectedVoice] =
+    useState<SpeechSynthesisVoice | null>(null);
 
+  // Voice toggle
   useEffect(() => {
     localStorage.setItem(
       "voiceEnabled",
@@ -28,10 +23,46 @@ export function VoiceProvider({
     );
   }, [voiceEnabled]);
 
+  // Load browser voices
   useEffect(() => {
+    const loadVoices = () => {
+      const availableVoices =
+        window.speechSynthesis.getVoices();
+
+      setVoices(availableVoices);
+
+      const savedVoice =
+        localStorage.getItem("voice");
+
+      const voice =
+        availableVoices.find(
+          (v) => v.name === savedVoice
+        ) ??
+        availableVoices.find((v) => v.default) ??
+        availableVoices[0] ??
+        null;
+
+      setSelectedVoice(voice);
+    };
+
+    loadVoices();
+
+    window.speechSynthesis.onvoiceschanged =
+      loadVoices;
+
+    return () => {
+      window.speechSynthesis.onvoiceschanged =
+        null;
+    };
+  }, []);
+
+  // Save selected voice
+  useEffect(() => {
+    if (!selectedVoice) return;
+
     localStorage.setItem(
       "voice",
-      selectedVoice.id
+      selectedVoice.name
     );
   }, [selectedVoice]);
 
@@ -41,6 +72,7 @@ export function VoiceProvider({
         voiceEnabled,
         setVoiceEnabled,
 
+        voices,
         selectedVoice,
         setSelectedVoice,
       }}

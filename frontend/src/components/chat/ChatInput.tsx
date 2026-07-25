@@ -437,10 +437,11 @@ lg:rounded-[30px]
               setMessage(e.target.value);
             }}
             onKeyDown={(e) => {
-              if (e.key === "Enter" && e.ctrlKey) {
+              if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
                 handleSend();
               }
+              
             }}
             className="
             w-full
@@ -565,7 +566,7 @@ sm:p-2.5
                 text-(--text-secondary)
               "
               >
-                Ctrl + Enter
+                Enter
               </span>
               {loading ? (
                 <Button

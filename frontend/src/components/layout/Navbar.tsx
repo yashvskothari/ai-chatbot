@@ -9,13 +9,13 @@ import {
   Volume2,
 } from "lucide-react";
 
-import { VOICES } from "../../constants/voices";
+import { useVoice } from "../../hooks/useVoice";
 import { useModel } from "../../hooks/useModel";
 import { MODELS } from "../../constants/models";
 import logo from "../../assets/logo.png";
 import ThemeToggle from "../ui/ThemeToggle";
 import { useClickOutside } from "../../hooks/useClickOutside";
-import type { VoiceOption } from "../../constants/voices";
+
 
 interface NavbarProps {
   onMenuClick: () => void;
@@ -25,10 +25,8 @@ interface NavbarProps {
 
   voiceEnabled: boolean;
   onToggleVoice: () => void;
-
-  selectedVoice: VoiceOption;
-  onVoiceChange: (voice: VoiceOption) => void;
 }
+
 
 const Navbar = ({
   onMenuClick,
@@ -39,8 +37,6 @@ const Navbar = ({
   voiceEnabled,
   onToggleVoice,
 
-  selectedVoice,
-  onVoiceChange,
 }: NavbarProps) => {
   const [exportOpen, setExportOpen] = useState(false);
   const [modelOpen, setModelOpen] = useState(false);
@@ -53,6 +49,11 @@ const Navbar = ({
   const modelRef = useRef<HTMLDivElement>(null);
 
   const { selectedModel, setSelectedModel } = useModel();
+  const {
+  voices,
+  selectedVoice,
+  setSelectedVoice,
+} = useVoice();
   useClickOutside(modelRef, () => setModelOpen(false));
   const exportRef = useRef<HTMLDivElement>(null);
 
@@ -210,6 +211,8 @@ const Navbar = ({
             </p>
           </div>
         </div>
+        
+        
 
         {/* Right */}
 
@@ -517,7 +520,7 @@ const Navbar = ({
             </button>
             
           </div>
-          <div className="relative ml-2" ref={voiceRef}>
+          <div className="relative " ref={voiceRef}>
   <button
     onClick={() => setVoiceOpen((v) => !v)}
     disabled={!voiceEnabled}
@@ -546,10 +549,10 @@ const Navbar = ({
       disabled:cursor-not-allowed
     "
   >
-    {selectedVoice.name}
+    {selectedVoice?.name ?? "Select Voice"}
 
     <ChevronDown
-      size={15}
+      size={16}
       className={`transition ${voiceOpen ? "rotate-180" : ""}`}
     />
   </button>
@@ -557,80 +560,74 @@ const Navbar = ({
   {voiceOpen && (
     <div
       className="
-        absolute
+      absolute
+      right-0
+      mt-2
 
-        right-0
-        top-11
+      w-80
 
-        z-50
+      max-h-80
+      overflow-y-auto
 
-        w-52
+      rounded-2xl
 
-        overflow-hidden
+      border
+      border-(--border-color)
 
-        rounded-xl
+      bg-(--bg-card)
 
-        border
-        border-(--border-color)
+      shadow-2xl
 
-        bg-(--bg-card)
+      backdrop-blur-xl
 
-        shadow-xl
-      "
+      z-50
+    "
     >
-      {VOICES.map((voice) => (
-        <button
-          key={voice.id}
-          onClick={() => {
-            onVoiceChange(voice);
-            setVoiceOpen(false);
-          }}
-          className="
-            flex
+    {voices.map((voice) => (
+      <button
+        key={voice.name}
+        onClick={() => {
+          setSelectedVoice(voice);
+          setVoiceOpen(false);
+        }}
+        className={`
+          w-full
+          px-4
+          py-3
+          text-left
+          transition-all
+          hover:bg-blue-500/10
 
-            w-full
+          ${
+            selectedVoice?.name === voice.name
+              ? "bg-blue-500/10"
+              : ""
+          }
+        `}
+      >
+        <div className="font-medium">
+          {voice.name}
+        </div>
 
-            items-center
-
-            justify-between
-
-            px-4
-            py-3
-
-            text-left
-
-            hover:bg-blue-500/10
-
-            transition
-          "
-        >
-          <div>
-            <div>{voice.name}</div>
-
-            <div className="text-xs text-slate-400">
-              {voice.gender}
-            </div>
+        <div className="text-xs text-(--text-secondary)">
+          {voice.lang}
+        </div>
+      </button>
+    ))}
           </div>
-
-          {selectedVoice.id === voice.id && (
-            <span className="text-blue-500">✓</span>
-          )}
-        </button>
-      ))}
-    </div>
   )}
-</div>
           
+        </div>
           <div className="shrink-0">
             
             <ThemeToggle />
             
           </div>
-          
-        </div>
+      </div>
       </div>
     </header>
   );
 };
+
 
 export default Navbar;
