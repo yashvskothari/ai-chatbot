@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-
+import { useModel } from "../hooks/useModel";
 import Navbar from "../components/layout/Navbar";
 import Sidebar from "../components/layout/Sidebar";
 import ChatWindow from "../components/chat/ChatWindow";
@@ -37,6 +37,7 @@ const ChatPage = () => {
     renameConversation,
     addDocuments,
   } = useConversations();
+  const { selectedModel } = useModel();
 
   const inputRef = useRef<ChatInputHandle>(null);
   const handleEditMessage = (message: Message) => {
@@ -47,33 +48,22 @@ const ChatPage = () => {
     inputRef.current?.focus();
   };
   const handleRegenerate = (assistantMessage: Message) => {
+    if (!activeConversation) return;
 
-  if (!activeConversation) return;
-
-  const assistantIndex =
-    activeConversation.messages.findIndex(
-      (m) => m.id === assistantMessage.id
+    const assistantIndex = activeConversation.messages.findIndex(
+      (m) => m.id === assistantMessage.id,
     );
 
-  if (assistantIndex <= 0) return;
+    if (assistantIndex <= 0) return;
 
-  const userMessage =
-    activeConversation.messages[assistantIndex - 1];
+    const userMessage = activeConversation.messages[assistantIndex - 1];
 
-  if (userMessage.role !== "user") return;
+    if (userMessage.role !== "user") return;
 
-  updateMessages(
-    activeConversation.messages.slice(
-      0,
-      assistantIndex - 1
-    )
-  );
+    updateMessages(activeConversation.messages.slice(0, assistantIndex - 1));
 
-  sendMessage(
-    userMessage.content,
-    []
-  );
-};
+    sendMessage(userMessage.content, []);
+  };
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -115,17 +105,17 @@ const ChatPage = () => {
     if (!activeConversation) return;
     let workingMessages = [...activeConversation.messages];
 
-if (editingMessageId !== null) {
-  const editIndex = workingMessages.findIndex(
-    (m) => m.id === editingMessageId,
-  );
+    if (editingMessageId !== null) {
+      const editIndex = workingMessages.findIndex(
+        (m) => m.id === editingMessageId,
+      );
 
-  if (editIndex !== -1) {
-    workingMessages = workingMessages.slice(0, editIndex);
-  }
+      if (editIndex !== -1) {
+        workingMessages = workingMessages.slice(0, editIndex);
+      }
 
-  setEditingMessageId(null);
-}
+      setEditingMessageId(null);
+    }
     if (!text.trim() && attachments.length === 0) return;
 
     // Attachments to display on this specific message bubble.
@@ -190,10 +180,7 @@ if (editingMessageId !== null) {
       streaming: true,
     };
 
-    let updatedMessages = [
-  ...workingMessages,
-  userMessage,
-];
+    let updatedMessages = [...workingMessages, userMessage];
     updateMessages(updatedMessages);
 
     setLoading(true);
@@ -235,15 +222,20 @@ if (editingMessageId !== null) {
     };
 
     await streamChatMessage(
-      {
-        message: text,
-        history: historyForRequest,
-        attachments: documentContext.map((d) => ({
-          filename: d.filename,
-          type: d.type,
-          content: d.content,
-        })),
-      },
+{
+  message: text,
+
+  provider: selectedModel.provider,
+  model: selectedModel.id,
+
+  history: historyForRequest,
+
+  attachments: documentContext.map((d) => ({
+    filename: d.filename,
+    type: d.type,
+    content: d.content,
+  })),
+},
       {
         onToken: applyToken,
         onDone: () => finish(),
@@ -308,7 +300,6 @@ if (editingMessageId !== null) {
             onSuggestionClick={handleSuggestionClick}
             onEditMessage={handleEditMessage}
             onRegenerate={handleRegenerate}
-
           />
 
           <div className="border-t-2 border-(--border-color)">

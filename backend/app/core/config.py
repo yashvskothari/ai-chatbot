@@ -1,20 +1,47 @@
 from dotenv import load_dotenv
+from pathlib import Path
 import os
 
-load_dotenv()
+# Resolve .env relative to this file (backend/app/core/config.py -> backend/.env),
+# so it loads correctly no matter what directory uvicorn is launched from.
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+ENV_PATH = BASE_DIR / ".env"
+
+loaded = load_dotenv(dotenv_path=ENV_PATH)
+
+if not loaded:
+    print(f"[config] WARNING: no .env file found at {ENV_PATH}")
+
+# =========================
+# API KEYS
+# =========================
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
-if not GROQ_API_KEY:
-    raise ValueError("GROQ_API_KEY not found")
+# =========================
+# DEFAULT MODELS
+# =========================
 
-# Text-generation model used for normal chat completions.
-# Groq deprecates/rotates models periodically -- override via env if needed.
-GROQ_TEXT_MODEL = os.getenv("GROQ_TEXT_MODEL", "openai/gpt-oss-120b")
+# Groq
+GROQ_TEXT_MODEL = os.getenv(
+    "GROQ_TEXT_MODEL",
+    "llama-3.3-70b-versatile",
+)
 
-# Vision-capable model used to analyze uploaded images.
-GROQ_VISION_MODEL = os.getenv("GROQ_VISION_MODEL", "qwen/qwen3.6-27b")
+GROQ_VISION_MODEL = os.getenv(
+    "GROQ_VISION_MODEL",
+    "meta-llama/llama-4-scout-17b-16e-instruct",
+)
 
-# Upload limits
-MAX_UPLOAD_SIZE_MB = int(os.getenv("MAX_UPLOAD_SIZE_MB", "10"))
-MAX_UPLOAD_SIZE_BYTES = MAX_UPLOAD_SIZE_MB * 1024 * 1024
+
+# =========================
+# Upload Limits
+# =========================
+
+MAX_UPLOAD_SIZE_MB = int(
+    os.getenv("MAX_UPLOAD_SIZE_MB", "10")
+)
+
+MAX_UPLOAD_SIZE_BYTES = (
+    MAX_UPLOAD_SIZE_MB * 1024 * 1024
+)

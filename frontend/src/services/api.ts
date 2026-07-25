@@ -10,6 +10,14 @@ const api = axios.create({
 });
 
 // ---------- Types ----------
+export type AIProvider =
+  | "groq";
+
+  export type AIModel =
+  | "llama-3.3-70b-versatile"
+
+  export type AIModelId =
+  | "groq-llama"
 
 export interface ChatMessagePayload {
   role: "user" | "assistant";
@@ -26,6 +34,8 @@ export interface ChatRequestPayload {
   message: string;
   history?: ChatMessagePayload[];
   attachments?: AttachmentContextPayload[];
+
+  modelId?: AIModel;
 }
 
 export interface UploadResult {
@@ -128,10 +138,14 @@ export const streamChatMessage = async (
 // ---------- File Upload ----------
 export const uploadFile = async (
   file: File,
+  provider: AIProvider,
+  model: string,
   signal?: AbortSignal,
 ): Promise<UploadResult> => {
   const formData = new FormData();
   formData.append("file", file);
+  formData.append("provider", provider);
+formData.append("model", model);
 
   const response = await api.post("/upload", formData, {
     headers: {

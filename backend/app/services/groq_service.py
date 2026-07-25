@@ -64,11 +64,12 @@ def generate_response(
     message: str,
     history: list[ChatMessage] | None = None,
     attachments: list[AttachmentContext] | None = None,
+    model: str | None = None,
 ) -> str:
     messages = _build_messages(message, history or [], attachments or [])
 
     completion = client.chat.completions.create(
-        model=GROQ_TEXT_MODEL,
+        model=model or GROQ_TEXT_MODEL,
         messages=messages,
     )
 
@@ -79,11 +80,12 @@ def stream_response(
     message: str,
     history: list[ChatMessage] | None = None,
     attachments: list[AttachmentContext] | None = None,
+    model: str | None = None,
 ) -> Generator[str, None, None]:
     messages = _build_messages(message, history or [], attachments or [])
 
     stream = client.chat.completions.create(
-        model=GROQ_TEXT_MODEL,
+        model=model or GROQ_TEXT_MODEL,
         messages=messages,
         stream=True,
     )

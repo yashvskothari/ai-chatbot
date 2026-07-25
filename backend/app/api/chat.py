@@ -4,7 +4,7 @@ from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
 
 from app.schemas.schemas import ChatRequest, ChatResponse
-from app.services.groq_service import generate_response, stream_response
+from app.services.chat_service import ChatService
 
 router = APIRouter()
 
@@ -12,11 +12,14 @@ router = APIRouter()
 @router.post("/chat", response_model=ChatResponse)
 def chat(request: ChatRequest):
     try:
-        ai_response = generate_response(
-            request.message,
-            request.history,
-            request.attachments,
+        ai_response = ChatService.generate(
+            provider=request.provider,
+            model=request.model,
+            message=request.message,
+            history=request.history,
+            attachments=request.attachments,
         )
+
         return ChatResponse(response=ai_response)
 
     except Exception as e:
@@ -28,12 +31,15 @@ def chat(request: ChatRequest):
 
 @router.post("/chat/stream")
 def chat_stream(request: ChatRequest):
+
     def event_generator():
         try:
-            for token in stream_response(
-                request.message,
-                request.history,
-                request.attachments,
+            for token in ChatService.stream(
+                provider=request.provider,
+                model=request.model,
+                message=request.message,
+                history=request.history,
+                attachments=request.attachments,
             ):
                 yield f"data: {json.dumps({'token': token})}\n\n"
 

@@ -23,8 +23,20 @@ class AttachmentContext(BaseModel):
 
 
 class ChatRequest(BaseModel):
+    """
+    Chat request sent by the frontend.
+    """
+
+    provider: Literal[
+        "groq",
+    ] = "groq"
+
+    model: str = "llama-3.3-70b-versatile"
+
     message: str
+
     history: list[ChatMessage] = Field(default_factory=list)
+
     attachments: list[AttachmentContext] = Field(default_factory=list)
 
 

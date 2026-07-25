@@ -1,6 +1,15 @@
 import { useRef, useState } from "react";
-import { Menu, Download, FileText, FileDown } from "lucide-react";
+import {
+  Menu,
+  Download,
+  FileText,
+  FileDown,
+  ChevronDown,
+  Cpu,
+} from "lucide-react";
 
+import { useModel } from "../../hooks/useModel";
+import { MODELS } from "../../constants/models";
 import logo from "../../assets/logo.png";
 import ThemeToggle from "../ui/ThemeToggle";
 import { useClickOutside } from "../../hooks/useClickOutside";
@@ -19,6 +28,12 @@ const Navbar = ({
   exportDisabled,
 }: NavbarProps) => {
   const [exportOpen, setExportOpen] = useState(false);
+  const [modelOpen, setModelOpen] = useState(false);
+
+  const modelRef = useRef<HTMLDivElement>(null);
+
+  const { selectedModel, setSelectedModel } = useModel();
+  useClickOutside(modelRef, () => setModelOpen(false));
   const exportRef = useRef<HTMLDivElement>(null);
 
   useClickOutside(exportRef, () => setExportOpen(false));
@@ -48,7 +63,6 @@ const Navbar = ({
       "
     >
       <div className="mx-auto flex h-full max-w-7xl items-center justify-between">
-
         {/* Left */}
 
         <div
@@ -61,7 +75,6 @@ const Navbar = ({
             lg:gap-4
           "
         >
-
           {/* Mobile Hamburger */}
 
           <button
@@ -190,33 +203,117 @@ const Navbar = ({
             lg:gap-4
           "
         >
+<div
+  className="relative hidden md:block"
+  ref={modelRef}
+>
+  <button
+    onClick={() => setModelOpen(!modelOpen)}
+    className="
+      flex
+      items-center
+      gap-2
+
+      rounded-full
+
+      border
+      border-(--border-color)
+
+      bg-(--bg-card)
+
+      px-4
+      py-2
+
+      text-sm
+
+      text-(--text-primary)
+
+      transition-all
+
+      hover:border-blue-500/40
+    "
+  >
+    <Cpu size={16} />
+
+    {selectedModel.name}
+
+    <ChevronDown
+      size={16}
+      className={`transition ${
+        modelOpen ? "rotate-180" : ""
+      }`}
+    />
+  </button>
+
+  {modelOpen && (
+    <div
+      className="
+        absolute
+        right-0
+        mt-2
+
+        w-72
+
+        overflow-hidden
+
+        rounded-2xl
+
+        border
+        border-(--border-color)
+
+        bg-(--bg-card)
+
+        shadow-2xl
+
+        backdrop-blur-xl
+
+        z-50
+      "
+    >
+      {MODELS.map((model) => (
+        <button
+          key={model.id}
+          onClick={() => {
+            setSelectedModel(model);
+            setModelOpen(false);
+          }}
+          className={`
+            w-full
+
+            px-4
+            py-3
+
+            text-left
+
+            transition-all
+
+            hover:bg-blue-500/10
+
+            ${
+              selectedModel.id === model.id
+                ? "bg-blue-500/10"
+                : ""
+            }
+          `}
+        >
+          <div className="font-medium">
+            {model.name}
+          </div>
+
           <div
             className="
-              hidden
-              md:flex
+              text-xs
 
-              rounded-full
-
-              border
-              border-(--border-color)
-
-              bg-(--bg-card)
-
-              px-3
-              lg:px-4
-
-              py-2
-
-              text-sm
-              text-(--text-primary)
-
-              backdrop-blur-lg
-
-              transition-all
+              text-(--text-secondary)
             "
           >
-            React • FastAPI • Groq
+            {model.description}
           </div>
+        </button>
+      ))}
+    </div>
+  )}
+</div>
 
           {(onExportMarkdown || onExportPDF) && (
             <div className="relative shrink-0" ref={exportRef}>
