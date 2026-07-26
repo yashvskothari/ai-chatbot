@@ -1,8 +1,8 @@
 import json
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import StreamingResponse
-
+from app.dependencies.auth import get_current_user
 from app.schemas.schemas import ChatRequest, ChatResponse
 from app.services.chat_service import ChatService
 
@@ -10,7 +10,10 @@ router = APIRouter()
 
 
 @router.post("/chat", response_model=ChatResponse)
-def chat(request: ChatRequest):
+def chat(
+    request: ChatRequest,
+    current_user=Depends(get_current_user),
+):
     try:
         ai_response = ChatService.generate(
             provider=request.provider,
@@ -30,7 +33,10 @@ def chat(request: ChatRequest):
 
 
 @router.post("/chat/stream")
-def chat_stream(request: ChatRequest):
+def chat_stream(
+    request: ChatRequest,
+    current_user=Depends(get_current_user),
+):
 
     def event_generator():
         try:

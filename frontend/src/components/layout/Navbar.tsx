@@ -8,6 +8,7 @@ import {
   Cpu,
   Volume2,
 } from "lucide-react";
+import ProfileMenu from "./ProfileMenu";
 
 import { useVoice } from "../../hooks/useVoice";
 import { useModel } from "../../hooks/useModel";
@@ -15,7 +16,6 @@ import { MODELS } from "../../constants/models";
 import logo from "../../assets/logo.png";
 import ThemeToggle from "../ui/ThemeToggle";
 import { useClickOutside } from "../../hooks/useClickOutside";
-
 
 interface NavbarProps {
   onMenuClick: () => void;
@@ -27,7 +27,6 @@ interface NavbarProps {
   onToggleVoice: () => void;
 }
 
-
 const Navbar = ({
   onMenuClick,
   onExportMarkdown,
@@ -36,7 +35,6 @@ const Navbar = ({
 
   voiceEnabled,
   onToggleVoice,
-
 }: NavbarProps) => {
   const [exportOpen, setExportOpen] = useState(false);
   const [modelOpen, setModelOpen] = useState(false);
@@ -49,11 +47,7 @@ const Navbar = ({
   const modelRef = useRef<HTMLDivElement>(null);
 
   const { selectedModel, setSelectedModel } = useModel();
-  const {
-  voices,
-  selectedVoice,
-  setSelectedVoice,
-} = useVoice();
+  const { voices, selectedVoice, setSelectedVoice } = useVoice();
   useClickOutside(modelRef, () => setModelOpen(false));
   const exportRef = useRef<HTMLDivElement>(null);
 
@@ -67,6 +61,7 @@ const Navbar = ({
 
         h-16
         lg:h-18
+        w-full
 
         px-4
         sm:px-6
@@ -83,14 +78,13 @@ const Navbar = ({
         duration-300
       "
     >
-      <div className="mx-auto flex h-full max-w-7xl items-center justify-between">
+      <div className="mx-auto flex h-full w-full items-center justify-between">
         {/* Left */}
 
         <div
           className="
             flex
             items-center
-
             gap-2
             sm:gap-3
             lg:gap-4
@@ -138,7 +132,7 @@ const Navbar = ({
               w-9
 
               sm:h-10
-              sm:w-10
+              sm:w-15
 
               lg:h-11
               lg:w-11
@@ -211,8 +205,6 @@ const Navbar = ({
             </p>
           </div>
         </div>
-        
-        
 
         {/* Right */}
 
@@ -518,13 +510,12 @@ const Navbar = ({
       `}
               />
             </button>
-            
           </div>
           <div className="relative " ref={voiceRef}>
-  <button
-    onClick={() => setVoiceOpen((v) => !v)}
-    disabled={!voiceEnabled}
-    className="
+            <button
+              onClick={() => setVoiceOpen((v) => !v)}
+              disabled={!voiceEnabled}
+              className="
       flex
       items-center
       gap-2
@@ -537,7 +528,7 @@ const Navbar = ({
       bg-(--bg-secondary)
 
       px-3
-      py-1.5
+      py-1
 
       text-sm
 
@@ -548,18 +539,18 @@ const Navbar = ({
       disabled:opacity-50
       disabled:cursor-not-allowed
     "
-  >
-    {selectedVoice?.name ?? "Select Voice"}
+            >
+              {selectedVoice?.name ?? "Select Voice"}
 
-    <ChevronDown
-      size={16}
-      className={`transition ${voiceOpen ? "rotate-180" : ""}`}
-    />
-  </button>
+              <ChevronDown
+                size={16}
+                className={`transition ${voiceOpen ? "rotate-180" : ""}`}
+              />
+            </button>
 
-  {voiceOpen && (
-    <div
-      className="
+            {voiceOpen && (
+              <div
+                className="
       absolute
       right-0
       mt-2
@@ -582,52 +573,36 @@ const Navbar = ({
 
       z-50
     "
-    >
-    {voices.map((voice) => (
-      <button
-        key={voice.name}
-        onClick={() => {
-          setSelectedVoice(voice);
-          setVoiceOpen(false);
-        }}
-        className={`
-          w-full
-          px-4
-          py-3
-          text-left
-          transition-all
-          hover:bg-blue-500/10
-
-          ${
-            selectedVoice?.name === voice.name
-              ? "bg-blue-500/10"
-              : ""
-          }
+              >
+                {voices.map((voice) => (
+                  <button
+                    key={voice.name}
+                    onClick={() => {
+                      setSelectedVoice(voice);
+                      setVoiceOpen(false);
+                    }}
+                    className={`w-full px-4 py-3 text-left transition-all hover:bg-blue-500/10
+          ${selectedVoice?.name === voice.name ? "bg-blue-500/10" : ""}
         `}
-      >
-        <div className="font-medium">
-          {voice.name}
-        </div>
+                  >
+                    <div className="font-medium">{voice.name}</div>
 
-        <div className="text-xs text-(--text-secondary)">
-          {voice.lang}
-        </div>
-      </button>
-    ))}
+                    <div className="text-xs text-(--text-secondary)">
+                      {voice.lang}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
-  )}
-          
-        </div>
           <div className="shrink-0">
-            
             <ThemeToggle />
-            
           </div>
-      </div>
+          <ProfileMenu />
+        </div>
       </div>
     </header>
   );
 };
-
 
 export default Navbar;

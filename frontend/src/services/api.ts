@@ -48,9 +48,23 @@ export interface UploadResult {
 }
 
 // ---------- Chat (non-streaming) ----------
-export const sendChatMessage = async (payload: ChatRequestPayload) => {
-  const response = await api.post("/chat", payload);
-  return response.data as { response: string };
+export const sendChatMessage = async (
+  payload: ChatRequestPayload,
+  token?: string | null
+) => {
+  const response = await api.post(
+    "/chat",
+    payload,
+    {
+      headers: token
+        ? {
+            Authorization: `Bearer ${token}`,
+          }
+        : {},
+    }
+  );
+
+  return response.data;
 };
 
 // ---------- Chat (streaming) ----------
@@ -64,11 +78,18 @@ export const streamChatMessage = async (
     onError: (message: string) => void;
   },
   signal?: AbortSignal,
+  token?: string | null
 ) => {
   try {
     const response = await fetch(`${BASE_URL}/chat/stream`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+  "Content-Type": "application/json",
+
+  ...(token && {
+    Authorization: `Bearer ${token}`,
+  }),
+},
       body: JSON.stringify(payload),
       signal,
     });

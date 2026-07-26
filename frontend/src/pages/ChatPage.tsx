@@ -5,6 +5,7 @@ import ChatWindow from "../components/chat/ChatWindow";
 import ChatInput from "../components/chat/ChatInput";
 import type { ChatInputHandle } from "../components/chat/ChatInput";
 import { cleanMarkdown } from "../utils/cleanMarkdown";
+import { useAuth } from "@clerk/clerk-react";
 import { useSpeechSynthesis } from "../hooks/useSpeechSynthesis";
 import { streamChatMessage } from "../services/api";
 import { useConversations } from "../hooks/useConversations";
@@ -24,25 +25,25 @@ const ChatPage = () => {
 
   const [editingMessageId, setEditingMessageId] = useState<number | null>(null);
   const { selectedVoice } = useVoice();
-
-const {
+  const {
     speak,
     stop,
     speaking,
-} = useSpeechSynthesis(selectedVoice);
+  } = useSpeechSynthesis(selectedVoice);
   
-
+  
   const handleSpeak = (message: Message) => {
-
+    
     if(!voiceEnabled) return;
     const cleaned = cleanMarkdown(message.content);
     speak(cleaned);
   };
-
+  
   const handleStopSpeaking = () => {
     stop();
   };
   const abortControllerRef = useRef<AbortController | null>(null);
+  const { getToken } = useAuth();
 
   // Sidebar
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -253,34 +254,32 @@ const {
       abortControllerRef.current = null;
       inputRef.current?.focus();
     };
+const token = await getToken();
+console.log("TOKEN =", token);
 
-    await streamChatMessage(
-      {
-        message: text,
-
-        // provider: selectedModel.provider,
-        // model: selectedModel.id,
-
-        history: historyForRequest,
-
-        attachments: documentContext.map((d) => ({
-          filename: d.filename,
-          type: d.type,
-          content: d.content,
-        })),
-      },
-      {
-        onToken: applyToken,
-        onDone: () => finish(),
-        onError: (message) => {
-          finish(
-            streamedContent ||
-              `Something went wrong: ${message || "please try again."}`,
-          );
-        },
-      },
-      controller.signal,
-    );
+await streamChatMessage(
+  {
+    message: text,
+    history: historyForRequest,
+    attachments: documentContext.map((d) => ({
+      filename: d.filename,
+      type: d.type,
+      content: d.content,
+    })),
+  },
+  {
+    onToken: applyToken,
+    onDone: () => finish(),
+    onError: (message) => {
+      finish(
+        streamedContent ||
+          `Something went wrong: ${message || "please try again."}`,
+      );
+    },
+  },
+  controller.signal,
+  token,
+);
   };
 
   const handleExportMarkdown = () => {

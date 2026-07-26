@@ -45,3 +45,19 @@ MAX_UPLOAD_SIZE_MB = int(
 MAX_UPLOAD_SIZE_BYTES = (
     MAX_UPLOAD_SIZE_MB * 1024 * 1024
 )
+
+# =========================
+# Clerk Authentication
+# =========================
+
+CLERK_SECRET_KEY = os.getenv("CLERK_SECRET_KEY")
+
+CLERK_JWKS_URL = os.getenv(
+    "CLERK_JWKS_URL",
+    "https://settled-sponge-64.clerk.accounts.dev/.well-known/jwks.json",
+)
+
+CLERK_ISSUER = os.getenv(
+    "CLERK_ISSUER",
+    "https://settled-sponge-64.clerk.accounts.dev",
+)
