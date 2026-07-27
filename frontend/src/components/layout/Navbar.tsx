@@ -15,6 +15,7 @@ import { MODELS } from "../../constants/models";
 import logo from "../../assets/logo.png";
 import ThemeToggle from "../ui/ThemeToggle";
 import { useClickOutside } from "../../hooks/useClickOutside";
+import ProfileMenu from "./ProfileMenu";
 
 interface NavbarProps {
   onMenuClick: () => void;
@@ -597,6 +598,7 @@ const Navbar = ({
           <div className="shrink-0">
             <ThemeToggle />
           </div>
+          <ProfileMenu />
         </div>
       </div>
     </header>

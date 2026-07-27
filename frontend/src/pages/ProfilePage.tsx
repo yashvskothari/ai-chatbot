@@ -1,5 +1,5 @@
 import { useUser } from "@clerk/clerk-react";
-import { User, Bot, Shield, Trash2, Pencil } from "lucide-react";
+import { User, Bot, Shield} from "lucide-react";
 import { useClerk } from "@clerk/clerk-react";
 
 const ProfilePage = () => {
@@ -64,26 +64,6 @@ const ProfilePage = () => {
                 <h2 className="text-2xl font-semibold">Personal Information</h2>
               </div>
 
-              <button
-                className="
-        flex
-        items-center
-        gap-2
-
-        rounded-xl
-
-        border
-        border-(--border-color)
-
-        px-4
-        py-2
-
-        hover:bg-blue-500/10
-      "
-              >
-                <Pencil size={16} />
-                Edit
-              </button>
             </div>
 
             <div className="space-y-4">
@@ -131,18 +111,6 @@ const ProfilePage = () => {
                   <p>Llama 3.3 70B</p>
                 </div>
 
-                <button
-                  className="
-          rounded-lg
-          border
-          border-(--border-color)
-          px-4
-          py-2
-          hover:bg-blue-500/10
-        "
-                >
-                  Change
-                </button>
               </div>
 
               <div className="flex justify-between">
@@ -154,18 +122,6 @@ const ProfilePage = () => {
                   <p>Aria</p>
                 </div>
 
-                <button
-                  className="
-          rounded-lg
-          border
-          border-(--border-color)
-          px-4
-          py-2
-          hover:bg-blue-500/10
-        "
-                >
-                  Change
-                </button>
               </div>
 
               <div className="flex justify-between">
@@ -175,18 +131,6 @@ const ProfilePage = () => {
                   <p>Dark</p>
                 </div>
 
-                <button
-                  className="
-          rounded-lg
-          border
-          border-(--border-color)
-          px-4
-          py-2
-          hover:bg-blue-500/10
-        "
-                >
-                  Change
-                </button>
               </div>
             </div>
           </div>
@@ -220,39 +164,6 @@ const ProfilePage = () => {
               Manage Account
             </button>
           </div>
-          <div
-            className="
-    mt-8
-    rounded-3xl
-    border
-    border-red-500/30
-    bg-(--bg-card)
-    p-8
-  "
-          >
-            <div className="flex items-center gap-3 mb-6">
-              <Trash2 size={22} className="text-red-500" />
-
-              <h2 className="text-2xl font-semibold text-red-500">
-                Danger Zone
-              </h2>
-            </div>
-
-            <button
-              className="
-      rounded-xl
-      bg-red-600
-      px-5
-      py-3
-      text-white
-      hover:bg-red-700
-      transition
-    "
-            >
-              Delete Account
-            </button>
-          </div>
-
           <hr className="my-8 border-(--border-color)" />
 
           <div className="space-y-3">
