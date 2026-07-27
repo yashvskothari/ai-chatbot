@@ -8,7 +8,6 @@ import {
   Cpu,
   Volume2,
 } from "lucide-react";
-import ProfileMenu from "./ProfileMenu";
 
 import { useVoice } from "../../hooks/useVoice";
 import { useModel } from "../../hooks/useModel";
@@ -598,7 +597,6 @@ const Navbar = ({
           <div className="shrink-0">
             <ThemeToggle />
           </div>
-          <ProfileMenu />
         </div>
       </div>
     </header>
