@@ -1,4 +1,6 @@
-# AI Chatbot
+# Flux AI
+
+An intelligent AI-powered chatbot built with React, FastAPI, and modern LLM technologies. Flux AI supports streaming conversations, document understanding, image analysis, authentication, and a modern responsive interface.
 
 A full-stack AI chatbot built with React, FastAPI, and the Groq API, featuring real-time conversational AI, modern UI, and scalable architecture.
 
@@ -6,21 +8,32 @@ A full-stack AI chatbot built with React, FastAPI, and the Groq API, featuring r
 
 ## Overview
 
-AI Chatbot is a conversational AI application designed to provide an intuitive chat experience powered by Large Language Models (LLMs). The project demonstrates modern full-stack development practices, REST API integration, and responsive frontend design.
+Flux AI is a modern full-stack AI assistant designed to deliver fast, interactive, and context-aware conversations.
+
+The application combines a React frontend with a FastAPI backend and integrates Large Language Models through the Groq API to provide real-time streaming responses.
+
+Users can authenticate securely, upload documents or images for AI analysis, choose AI models, interact using voice input, and enjoy a clean, responsive user experience.
+
+Flux AI demonstrates modern full-stack architecture, REST API design, authentication, scalable backend practices, and production deployment.
 
 ---
 
 ## Features
 
 - AI-powered conversations
-- Groq API integration
-- Modern React interface
-- FastAPI backend
-- Responsive design
+- Real-time streaming responses
+- Secure Clerk authentication
+- Voice input support
 - Markdown rendering
+- Image understanding
+- Document upload & analysis
+- Drag & Drop file uploads
+- Multiple AI model support
+- Modern responsive UI
+- Conversation history during session
 - Loading indicators
 - Error handling
-
+- Mobile-friendly design
 ---
 
 ## Tech Stack
@@ -28,19 +41,31 @@ AI Chatbot is a conversational AI application designed to provide an intuitive c
 ### Frontend
 
 - React
+- TypeScript
 - Vite
 - Tailwind CSS
 - Axios
 - React Markdown
+- Clerk Authentication
 - Lucide React
 
 ### Backend
 
 - Python
 - FastAPI
+- SQLAlchemy
+- Alembic
+- PostgreSQL
 - Groq SDK
 - Pydantic
 - python-dotenv
+- Uvicorn
+
+### AI
+
+- Groq API
+- Llama 3.3 70B
+- Llama 4 Scout
 
 ### Deployment
 
@@ -52,20 +77,62 @@ AI Chatbot is a conversational AI application designed to provide an intuitive c
 ## Project Structure
 
 ```
-AI-Chatbot/
+Flux-AI/
 
 ├── backend/
-
+│   ├── app/
+│   ├── alembic/
+│   ├── requirements.txt
+│   └── main.py
+│
 ├── frontend/
-
+│   ├── src/
+│   ├── public/
+│   └── package.json
+│
 ├── docs/
+│
+└── README.md
+```
+---
 
-├── README.md
+## Architecture
 
-└── LICENSE
+```
+Frontend (React + TypeScript)
+        │
+        ▼
+   Clerk Authentication
+        │
+        ▼
+ FastAPI Backend (Render)
+        │
+        ▼
+    Groq API (LLMs)
+        │
+        ▼
+ Streaming AI Responses
+```
+---
+
+## Environment Variables
+
+### Backend
+
+```env
+GROQ_API_KEY=
+CLERK_SECRET_KEY=
+DATABASE_URL=
 ```
 
+### Frontend
+
+```env
+VITE_API_URL=
+VITE_CLERK_PUBLISHABLE_KEY=
+```
 ---
+
 
 ## Installation
 
@@ -123,19 +190,19 @@ npm run dev
 
 ## Future Improvements
 
-- Authentication
-- Chat history
-- Database integration
-- Voice support
-- Image upload
-- Model selection
-- Streaming responses
-- Export chats
+- Persistent chat history
+- Multiple conversations
+- User profile management
+- AI memory
+- More LLM providers
+- Chat export
+- Dark/Light themes
+- Mobile App
 
 ---
 
 ## Disclaimer
 
-This project is developed for educational and portfolio purposes. It is not intended for production use without additional security, authentication, and scalability enhancements.
+Flux AI is developed for educational, learning, and portfolio purposes. AI responses may not always be accurate. Users should verify important information independently.
 
 ---

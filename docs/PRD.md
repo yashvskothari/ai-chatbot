@@ -1,23 +1,16 @@
 # Product Requirements Document (PRD)
 
-## Project Name
-AI Chatbot
+# Project Name
 
-## Overview
-
-AI Chatbot is a full-stack conversational AI application that enables users to interact with Large Language Models through a clean, modern, and responsive web interface. The application integrates the Groq API to generate fast, intelligent, and context-aware responses.
-
-The primary objective of this project is to demonstrate practical implementation of AI technologies, REST APIs, and full-stack development using React and FastAPI.
+Flux AI
 
 ---
 
-## Objectives
+## Product Vision
 
-- Build a ChatGPT-inspired conversational interface.
-- Integrate Groq's LLM API.
-- Provide real-time AI responses.
-- Deliver a responsive and user-friendly experience.
-- Follow scalable software architecture.
+Flux AI is a modern AI-powered assistant that provides fast, intelligent, and interactive conversations using Large Language Models.
+
+The platform allows users to authenticate securely, upload documents and images, chat with AI in real time, and experience a clean, responsive interface across devices.
 
 ---
 
@@ -25,59 +18,98 @@ The primary objective of this project is to demonstrate practical implementation
 
 - Students
 - Developers
-- AI Enthusiasts
-- Recruiters
-- Hiring Managers
+- Researchers
+- Content creators
+- Professionals
+- General AI users
 
 ---
 
 ## Core Features
 
-### Chat Interface
+### Authentication
 
-- Send messages
-- Receive AI responses
-- Auto-scroll
-- Loading indicator
-- Enter to send
+- Secure login with Clerk
+- User session management
+- Protected routes
 
 ---
 
-### AI Integration
+### AI Chat
 
-- Groq API
-- System prompts
-- Context-aware conversations
-- Error handling
+- Real-time streaming responses
+- Markdown rendering
+- Conversation history (current session)
+- Multiple AI models
+
+---
+
+### File Support
+
+- Document upload
+- Image upload
+- AI document understanding
+- AI image understanding
+
+---
+
+### Voice
+
+- Voice-to-text input
 
 ---
 
 ### User Experience
 
 - Responsive design
-- Dark mode
-- Clean typography
-- Chat bubbles
+- Mobile support
+- Loading indicators
+- Error handling
+- Modern UI
 
 ---
 
-## Future Enhancements
+## Functional Requirements
 
-- Authentication
-- Chat history
-- Multiple conversations
-- Image upload
-- Voice input
-- Export chats
-- Model selection
-- Database support
+Users should be able to
+
+- Sign In
+- Sign Up
+- Chat with AI
+- Upload files
+- Upload images
+- Receive streaming responses
+- Copy AI responses
+- Clear conversations
+- Select AI models
 
 ---
 
-## Success Metrics
+## Non Functional Requirements
 
-- Fast response generation
+- Fast response time
+- Secure authentication
+- Modular architecture
+- Production deployment
+- Easy scalability
+
+---
+
+## Success Criteria
+
+- Smooth user experience
+- Fast AI responses
+- Stable deployment
 - Responsive UI
-- Stable backend
-- Clean architecture
-- Successful deployment
+- Secure authentication
+
+---
+
+## Future Scope
+
+- Persistent chat history
+- Multiple conversations
+- User profile
+- AI memory
+- Additional AI providers
+- Mobile application

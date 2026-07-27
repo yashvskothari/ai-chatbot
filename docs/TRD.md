@@ -2,17 +2,21 @@
 
 ## Architecture
 
-Frontend
-
-React + Vite
-
-↓
-
-FastAPI Backend
-
-↓
-
-Groq API
+```
+React + TypeScript (Vite)
+            │
+            ▼
+     Clerk Authentication
+            │
+            ▼
+FastAPI Backend (Render)
+            │
+            ▼
+     Groq LLM APIs
+            │
+            ▼
+   Streaming AI Responses
+```
 
 ---
 
@@ -21,30 +25,63 @@ Groq API
 ### Frontend
 
 - React
+- TypeScript
 - Vite
 - Tailwind CSS
 - Axios
 - React Markdown
+- Clerk
 - Lucide React
+
+---
 
 ### Backend
 
 - Python
 - FastAPI
-- Groq SDK
+- SQLAlchemy
+- Alembic
+- PostgreSQL
 - Pydantic
+- Groq SDK
 - python-dotenv
 - Uvicorn
+
+---
+
+### Database
+
+- PostgreSQL
+
+---
+
+### Authentication
+
+- Clerk
+
+---
+
+### AI Models
+
+- Llama 3.3 70B
+- Llama 4 Scout
+
+---
 
 ### Deployment
 
 Frontend
+
 - Vercel
 
 Backend
+
 - Render
 
-Version Control
+---
+
+### Version Control
+
 - Git
 - GitHub
 
@@ -52,50 +89,87 @@ Version Control
 
 ## Folder Structure
 
-AI-Chatbot/
+```
+Flux-AI/
 
 backend/
-
+│
+├── alembic/
+├── app/
+│   ├── api/
+│   ├── core/
+│   ├── models/
+│   ├── services/
+│   └── utils/
+│
 frontend/
-
-docs/
-
+│
+├── src/
+│   ├── components/
+│   ├── hooks/
+│   ├── pages/
+│   ├── services/
+│   └── contexts/
+│
 README.md
+```
 
 ---
 
 ## Backend Responsibilities
 
-- Handle incoming requests
-- Validate input
-- Connect with Groq API
-- Return AI responses
-- Handle exceptions
+- Authentication verification
+- Handle chat requests
+- Stream AI responses
+- File upload processing
+- Connect to Groq APIs
+- Database interaction
+- Input validation
+- Error handling
 
 ---
 
 ## Frontend Responsibilities
 
+- Authentication
 - Display conversations
-- Send requests
 - Render Markdown
-- Handle loading state
-- Responsive design
+- Upload files
+- Upload images
+- Streaming response rendering
+- Voice input
+- Responsive UI
+
+---
+
+## Database
+
+Tables
+
+- users
+
+Future
+
+- chats
+- conversations
+- uploaded_files
 
 ---
 
 ## Security
 
-- Environment Variables
-- Hidden API Keys
-- CORS Configuration
-- Input Validation
+- Environment variables
+- Hidden API keys
+- Clerk authentication
+- Input validation
+- CORS configuration
 
 ---
 
 ## Performance Goals
 
-- Low response latency
-- Clean API design
+- Low latency
+- Streaming responses
 - Modular architecture
 - Easy scalability
+- Production ready
