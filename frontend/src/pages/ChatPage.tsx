@@ -1,4 +1,7 @@
+import { useUser } from "@clerk/clerk-react";
+import LoginRequiredModal from "../components/auth/LoginRequiredModal";
 import { useEffect, useRef, useState } from "react";
+
 import Navbar from "../components/layout/Navbar";
 import Sidebar from "../components/layout/Sidebar";
 import ChatWindow from "../components/chat/ChatWindow";
@@ -20,6 +23,16 @@ import type { ChatMessagePayload } from "../services/api";
 const MAX_HISTORY_MESSAGES = 20;
 
 const ChatPage = () => {
+  const { isSignedIn } = useUser();
+
+const FREE_LIMIT = 4;
+
+const [guestCount, setGuestCount] = useState(() => {
+  const saved = localStorage.getItem("guest-count");
+  return saved ? Number(saved) : 0;
+});
+
+const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(false);
   const [editingMessageId, setEditingMessageId] = useState<number | null>(null);
@@ -91,6 +104,12 @@ const ChatPage = () => {
   }, [voiceEnabled, stop]);
 
   useEffect(() => {
+  if (!isSignedIn) {
+    localStorage.setItem("guest-count", guestCount.toString());
+  }
+}, [guestCount, isSignedIn]);
+
+  useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (
         e.key === "/" &&
@@ -105,12 +124,22 @@ const ChatPage = () => {
 
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
+  useEffect(() => {
+  if (!isSignedIn) {
+    localStorage.setItem("guest-count", guestCount.toString());
+  }
+}, [guestCount, isSignedIn]);
 
   useEffect(() => {
     if (conversations.length === 0) {
       createConversation();
     }
   }, [conversations, createConversation]);
+  useEffect(() => {
+  if (!isSignedIn) {
+    localStorage.setItem("guest-count", guestCount.toString());
+  }
+}, [guestCount, isSignedIn]);
 
   const stopGeneration = () => {
     abortControllerRef.current?.abort();
@@ -125,9 +154,16 @@ const ChatPage = () => {
   };
 
   const sendMessage = async (
+    
     text: string,
     attachments: PendingAttachment[],
   ) => {
+if (!isSignedIn && guestCount >= FREE_LIMIT) {
+  stop();
+  setLoading(false);
+  setLoginModalOpen(true);
+  return;
+}
     if (!activeConversation) return;
     let workingMessages = [...activeConversation.messages];
 
@@ -256,6 +292,7 @@ const ChatPage = () => {
 const token = await getToken();
 console.log("TOKEN =", token);
 
+console.log("Sending token:", token);
 await streamChatMessage(
   {
     message: text,
@@ -268,7 +305,13 @@ await streamChatMessage(
   },
   {
     onToken: applyToken,
-    onDone: () => finish(),
+    onDone: () => {
+  if (!isSignedIn) {
+    setGuestCount((prev) => prev + 1);
+  }
+
+  finish();
+},
     onError: (message) => {
       finish(
         streamedContent ||
@@ -326,6 +369,10 @@ await streamChatMessage(
           onRename={renameConversation}
           onDelete={deleteConversation}
         />
+        <LoginRequiredModal
+    open={loginModalOpen}
+    onClose={() => setLoginModalOpen(false)}
+/>
 
         <div className="flex flex-1 flex-col">
           <ChatWindow
@@ -350,6 +397,11 @@ await streamChatMessage(
           </div>
         </div>
       </div>
+      
+      <LoginRequiredModal
+    open={!isSignedIn && loginModalOpen}
+    onClose={() => setLoginModalOpen(false)}
+/>
     </div>
   );
   // const exportRef = useRef<HTMLDivElement>(null);

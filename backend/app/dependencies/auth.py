@@ -1,4 +1,5 @@
 from functools import lru_cache
+from typing import Optional
 import time
 import traceback
 
@@ -88,3 +89,44 @@ def get_current_user(
             status_code=401,
             detail=str(e),
         )
+        
+def get_current_user_optional(
+    authorization: Optional[str] = Header(None),
+):
+    """
+    Guest users -> returns None
+    Logged-in users -> returns verified Clerk payload
+    """
+
+    if authorization is None:
+        return None
+
+    if not authorization.startswith("Bearer "):
+        return None
+
+    token = authorization.replace("Bearer ", "")
+
+    try:
+        signing_key = (
+            get_jwk_client()
+            .get_signing_key_from_jwt(token)
+            .key
+        )
+
+        payload = jwt.decode(
+            token,
+            signing_key,
+            algorithms=["RS256"],
+            issuer=CLERK_ISSUER,
+            leeway=60,
+            options={
+                "verify_aud": False,
+            },
+        )
+
+        return payload
+
+    except Exception:
+        # Invalid token → treat as guest
+        return None
+        
