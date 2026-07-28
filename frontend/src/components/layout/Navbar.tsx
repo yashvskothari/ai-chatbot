@@ -1,57 +1,18 @@
-import { useRef, useState } from "react";
-import {
-  Menu,
-  Download,
-  FileText,
-  FileDown,
-  ChevronDown,
-  Cpu,
-  Volume2,
-} from "lucide-react";
-
-import { useVoice } from "../../hooks/useVoice";
-import { useModel } from "../../hooks/useModel";
-import { MODELS } from "../../constants/models";
 import logo from "../../assets/logo.png";
-import ThemeToggle from "../ui/ThemeToggle";
-import { useClickOutside } from "../../hooks/useClickOutside";
+
 import ProfileMenu from "./ProfileMenu";
+import {
+Menu,
+} from "lucide-react";
 
 interface NavbarProps {
   onMenuClick: () => void;
-  onExportMarkdown?: () => void;
-  onExportPDF?: () => void;
-  exportDisabled?: boolean;
-
-  voiceEnabled: boolean;
-  onToggleVoice: () => void;
 }
 
 const Navbar = ({
   onMenuClick,
-  onExportMarkdown,
-  onExportPDF,
-  exportDisabled,
 
-  voiceEnabled,
-  onToggleVoice,
 }: NavbarProps) => {
-  const [exportOpen, setExportOpen] = useState(false);
-  const [modelOpen, setModelOpen] = useState(false);
-  const [voiceOpen, setVoiceOpen] = useState(false);
-
-  const voiceRef = useRef<HTMLDivElement>(null);
-
-  useClickOutside(voiceRef, () => setVoiceOpen(false));
-
-  const modelRef = useRef<HTMLDivElement>(null);
-
-  const { selectedModel, setSelectedModel } = useModel();
-  const { voices, selectedVoice, setSelectedVoice } = useVoice();
-  useClickOutside(modelRef, () => setModelOpen(false));
-  const exportRef = useRef<HTMLDivElement>(null);
-
-  useClickOutside(exportRef, () => setExportOpen(false));
   return (
     <header
       className="
@@ -63,8 +24,8 @@ const Navbar = ({
         lg:h-18
         w-full
 
-        px-4
-        sm:px-6
+        px-2
+        sm:px-4
         lg:px-8
 
         border-b
@@ -78,7 +39,8 @@ const Navbar = ({
         duration-300
       "
     >
-      <div className="mx-auto flex h-full w-full items-center justify-between">
+
+      <div className="mx-auto flex h-full w-full items-center justify-between overflow-hidden">
         {/* Left */}
 
         <div
@@ -121,6 +83,33 @@ const Navbar = ({
           >
             <Menu size={22} />
           </button>
+                  {/* Mobile close button */}
+        {/* <button
+          onClick={onClose}
+          aria-label="Close menu"
+          className="
+  absolute
+  right-3
+  top-3
+  z-100
+            flex
+            h-9
+            w-9
+            items-center
+            justify-center
+            rounded-xl
+            border
+            border-(--border-color)
+            bg-(--bg-card)
+            text-(--text-primary)
+            transition-all
+            duration-300
+            hover:bg-blue-500/10
+            md:hidden
+          "
+        >
+          <X size={18} />
+        </button> */}
 
           {/* Logo */}
 
@@ -128,11 +117,11 @@ const Navbar = ({
             className="
               flex
 
-              h-9
-              w-9
+              h-8
+              w-8
 
-              sm:h-10
-              sm:w-15
+              sm:h-9
+              sm:w-9
 
               lg:h-11
               lg:w-11
@@ -158,6 +147,7 @@ const Navbar = ({
                 h-16
                 w-16
 
+              
                 sm:h-18
                 sm:w-18
 
@@ -173,16 +163,14 @@ const Navbar = ({
           <div>
             <h1
               className="
-                text-lg
-                sm:text-xl
+                text-base
+                sm:text-lg
                 lg:text-2xl
 
                 font-semibold
                 tracking-wide
 
                 text-(--text-primary)
-
-                transition-colors
               "
             >
               Flux AI
@@ -191,14 +179,12 @@ const Navbar = ({
             <p
               className="
                 hidden
-                sm:block
+                lg:block
 
                 text-xs
                 lg:text-sm
 
-                text-(--text-primary)
-
-                transition-colors
+                text-(--text-secondary)
               "
             >
               Intelligent AI Workspace
@@ -218,387 +204,9 @@ const Navbar = ({
             lg:gap-4
           "
         >
-          <div className="relative hidden md:block" ref={modelRef}>
-            <button
-              onClick={() => setModelOpen(!modelOpen)}
-              className="
-      flex
-      items-center
-      gap-2
-
-      rounded-full
-
-      border
-      border-(--border-color)
-
-      bg-(--bg-card)
-
-      px-4
-      py-2
-
-      text-sm
-
-      text-(--text-primary)
-
-      transition-all
-
-      hover:border-blue-500/40
-    "
-            >
-              <Cpu size={16} />
-
-              {selectedModel.name}
-
-              <ChevronDown
-                size={16}
-                className={`transition ${modelOpen ? "rotate-180" : ""}`}
-              />
-            </button>
-
-            {modelOpen && (
-              <div
-                className="
-        absolute
-        right-0
-        mt-2
-
-        w-72
-
-        overflow-hidden
-
-        rounded-2xl
-
-        border
-        border-(--border-color)
-
-        bg-(--bg-card)
-
-        shadow-2xl
-
-        backdrop-blur-xl
-
-        z-50
-      "
-              >
-                {MODELS.map((model) => (
-                  <button
-                    key={model.id}
-                    onClick={() => {
-                      setSelectedModel(model);
-                      setModelOpen(false);
-                    }}
-                    className={`
-            w-full
-
-            px-4
-            py-3
-
-            text-left
-
-            transition-all
-
-            hover:bg-blue-500/10
-
-            ${selectedModel.id === model.id ? "bg-blue-500/10" : ""}
-          `}
-                  >
-                    <div className="font-medium">{model.name}</div>
-
-                    <div
-                      className="
-              text-xs
-
-              text-(--text-secondary)
-            "
-                    >
-                      {model.description}
-                    </div>
-                  </button>
-                ))}
-              </div>
-            )}
+          <div className="hidden sm:block">
+            <ProfileMenu />
           </div>
-
-          {(onExportMarkdown || onExportPDF) && (
-            <div className="relative shrink-0" ref={exportRef}>
-              <button
-                onClick={() => setExportOpen((v) => !v)}
-                disabled={exportDisabled}
-                className="
-                  flex
-                  h-10
-                  w-10
-
-                  sm:h-11
-                  sm:w-11
-
-                  items-center
-                  justify-center
-
-                  rounded-xl
-
-                  border
-                  border-(--border-color)
-
-                  bg-(--bg-card)
-
-                  text-(--text-primary)
-
-                  transition-all
-                  duration-300
-
-                  hover:bg-blue-500/10
-
-                  disabled:opacity-40
-                  disabled:pointer-events-none
-                "
-                aria-label="Export conversation"
-              >
-                <Download size={18} />
-              </button>
-
-              {exportOpen && (
-                <div
-                  className="
-                    absolute
-                    right-0
-                    top-13
-
-                    z-50
-
-                    w-48
-
-                    overflow-hidden
-
-                    rounded-2xl
-
-                    border
-                    border-(--border-color)
-
-                    bg-(--bg-card)
-
-                    shadow-2xl
-
-                    backdrop-blur-xl
-                  "
-                >
-                  <button
-                    onClick={() => {
-                      onExportMarkdown?.();
-                      setExportOpen(false);
-                    }}
-                    className="
-                      flex
-                      w-full
-                      items-center
-                      gap-3
-
-                      px-4
-                      py-3
-
-                      text-sm
-                      text-(--text-primary)
-
-                      transition
-
-                      hover:bg-black/10
-                      dark:hover:bg-white/10
-                    "
-                  >
-                    <FileText size={16} />
-                    Export as Markdown
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      onExportPDF?.();
-                      setExportOpen(false);
-                    }}
-                    className="
-                      flex
-                      w-full
-                      items-center
-                      gap-3
-
-                      px-4
-                      py-3
-
-                      text-sm
-                      text-(--text-primary)
-
-                      transition
-
-                      hover:bg-black/10
-                      dark:hover:bg-white/10
-                    "
-                  >
-                    <FileDown size={16} />
-                    Export as PDF
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
-
-          <div
-            className="
-    hidden
-    md:flex
-
-    items-center
-    gap-3
-
-    rounded-full
-
-    border
-    border-(--border-color)
-
-    bg-(--bg-card)
-
-    px-4
-    py-2
-  "
-          >
-            <Volume2
-              size={18}
-              className={voiceEnabled ? "text-blue-500" : "text-slate-400"}
-            />
-
-            <span
-              className="
-      text-sm
-      text-(--text-primary)
-    "
-            >
-              Voice
-            </span>
-
-            <button
-              onClick={onToggleVoice}
-              className={`
-      relative
-
-      h-6
-      w-11
-
-      rounded-full
-
-      transition-all
-      duration-300
-
-      ${voiceEnabled ? "bg-blue-600" : "bg-slate-400"}
-    `}
-            >
-              <span
-                className={`
-        absolute
-
-        top-0.5
-        left-0.5
-
-        h-5
-        w-5
-
-        rounded-full
-
-        bg-white
-
-        transition-all
-        duration-300
-
-        ${voiceEnabled ? "translate-x-5" : ""}
-      `}
-              />
-            </button>
-          </div>
-          <div className="relative " ref={voiceRef}>
-            <button
-              onClick={() => setVoiceOpen((v) => !v)}
-              disabled={!voiceEnabled}
-              className="
-      flex
-      items-center
-      gap-2
-
-      rounded-lg
-
-      border
-      border-(--border-color)
-
-      bg-(--bg-secondary)
-
-      px-3
-      py-1
-
-      text-sm
-
-      transition-all
-
-      hover:bg-blue-500/10
-
-      disabled:opacity-50
-      disabled:cursor-not-allowed
-    "
-            >
-              {selectedVoice?.name ?? "Select Voice"}
-
-              <ChevronDown
-                size={16}
-                className={`transition ${voiceOpen ? "rotate-180" : ""}`}
-              />
-            </button>
-
-            {voiceOpen && (
-              <div
-                className="
-      absolute
-      right-0
-      mt-2
-
-      w-80
-
-      max-h-80
-      overflow-y-auto
-
-      rounded-2xl
-
-      border
-      border-(--border-color)
-
-      bg-(--bg-card)
-
-      shadow-2xl
-
-      backdrop-blur-xl
-
-      z-50
-    "
-              >
-                {voices.map((voice) => (
-                  <button
-                    key={voice.name}
-                    onClick={() => {
-                      setSelectedVoice(voice);
-                      setVoiceOpen(false);
-                    }}
-                    className={`w-full px-4 py-3 text-left transition-all hover:bg-blue-500/10
-          ${selectedVoice?.name === voice.name ? "bg-blue-500/10" : ""}
-        `}
-                  >
-                    <div className="font-medium">{voice.name}</div>
-
-                    <div className="text-xs text-(--text-secondary)">
-                      {voice.lang}
-                    </div>
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-          <div className="shrink-0">
-            <ThemeToggle />
-          </div>
-          <ProfileMenu />
         </div>
       </div>
     </header>

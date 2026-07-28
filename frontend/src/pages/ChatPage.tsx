@@ -22,7 +22,6 @@ const MAX_HISTORY_MESSAGES = 20;
 const ChatPage = () => {
   const [loading, setLoading] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(false);
-
   const [editingMessageId, setEditingMessageId] = useState<number | null>(null);
   const { selectedVoice } = useVoice();
   const {
@@ -305,20 +304,21 @@ await streamChatMessage(
       "
     >
       <Navbar
-        onMenuClick={() => setSidebarOpen(true)}
-        onExportMarkdown={handleExportMarkdown}
-        onExportPDF={handleExportPDF}
-        exportDisabled={
-          !activeConversation || activeConversation.messages.length === 0
-        }
-        voiceEnabled={voiceEnabled}
-        onToggleVoice={() => setVoiceEnabled((v) => !v)}
+       onMenuClick={() => setSidebarOpen(true)}
       />
 
       <div className="flex flex-1 overflow-hidden">
         <Sidebar
+          exportDisabled={
+            !activeConversation || activeConversation.messages.length === 0
+          }
+          
           open={sidebarOpen}
           onClose={() => setSidebarOpen(false)}
+          onExportMarkdown={handleExportMarkdown}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={() => setVoiceEnabled((v) => !v)}
+          onExportPDF={handleExportPDF}
           conversations={conversations}
           activeConversationId={activeConversationId}
           onSelect={selectConversation}

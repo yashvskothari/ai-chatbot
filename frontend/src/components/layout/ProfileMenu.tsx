@@ -21,10 +21,6 @@ const ProfileMenu = () => {
         <p className="text-sm font-medium text-(--text-primary)">
           {user?.fullName}
         </p>
-
-        <p className="text-xs text-(--text-secondary)">
-          {user?.primaryEmailAddress?.emailAddress}
-        </p>
       </div>
 
       <UserButton

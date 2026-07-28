@@ -28,10 +28,10 @@ const SUGGESTIONS = [
   {
     icon: Code2,
     color: "text-blue-400",
-    title: "Generate Code",
+    title: "Generate Code Snippets",
     description: "Build React, Python, FastAPI and more.",
     prompt:
-      "Write a well-documented function that solves the following problem: ",
+      "Write a code snippet to solve the following problem problem: ",
   },
   {
     icon: FileText,
