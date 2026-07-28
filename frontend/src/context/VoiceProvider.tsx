@@ -34,15 +34,29 @@ export function VoiceProvider({
       const savedVoice =
         localStorage.getItem("voice");
 
-      const voice =
-        availableVoices.find(
-          (v) => v.name === savedVoice
-        ) ??
-        availableVoices.find((v) => v.default) ??
-        availableVoices[0] ??
-        null;
+let voice =
+  availableVoices.find((v) => v.name === savedVoice);
 
-      setSelectedVoice(voice);
+if (!voice) {
+  voice =
+    availableVoices.find(
+      (v) =>
+        v.lang === "en-US" &&
+        (
+          v.name.includes("Aria") ||
+          v.name.includes("Jenny") ||
+          v.name.includes("Guy") ||
+          v.name.includes("Davis")
+        )
+    ) ??
+    availableVoices.find((v) => v.lang === "en-US") ??
+    availableVoices.find((v) => v.lang.startsWith("en")) ??
+    availableVoices.find((v) => v.default) ??
+    availableVoices[0] ??
+    null;
+}
+
+setSelectedVoice(voice);
     };
 
     loadVoices();

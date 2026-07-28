@@ -278,12 +278,11 @@ if (!isSignedIn && guestCount >= FREE_LIMIT) {
       );
 
       updateMessages(updatedMessages);
+const textToSpeak = finalContent ?? streamedContent;
 
-      const textToSpeak = finalContent ?? streamedContent;
-
-      if (textToSpeak.trim()) {
-        speak(textToSpeak);
-      }
+if (voiceEnabled && textToSpeak.trim()) {
+  speak(textToSpeak);
+}
 
       setLoading(false);
       abortControllerRef.current = null;
