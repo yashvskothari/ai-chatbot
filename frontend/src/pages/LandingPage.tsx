@@ -82,7 +82,7 @@ const LandingPage = () => {
           transition-all
 
           hover:bg-blue-500
-          hover:text-white
+          hover:text-black
         "
       >
         Sign In

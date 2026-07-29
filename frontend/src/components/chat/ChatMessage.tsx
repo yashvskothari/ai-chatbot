@@ -132,21 +132,21 @@ sm:w-10
 
 lg:rounded-[26px]
     text-lg
-    px-4
+    px-1
 
 sm:px-4
 
 lg:px-6
     py-1
 
-lg:py-0
+lg:py-3
 
-    leading-1
+    leading-7
 
-lg:leading-0
+lg:leading-10
+sm:leading-6
 
     whitespace-pre-wrap
-    overflow-hidden
 
     border
 

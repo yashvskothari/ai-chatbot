@@ -22,7 +22,7 @@ export default function CTA() {
             rounded-4xl
 
             border
-            border-white/10
+            border-(--border-color)
 
             bg-white/5
 
@@ -35,20 +35,22 @@ export default function CTA() {
 
             shadow-2xl
             shadow-blue-500/10
+            
           "
         >
+          
 
-          <span className="rounded-full bg-blue-500/10 px-4 py-2 text-sm font-medium text-blue-400">
+          <span className="rounded-full bg-(--bg-card) px-4 py-2 text-sm font-medium text-blue-400">
             Ready to start?
           </span>
 
-          <h2 className="mt-8 text-4xl font-bold text-white md:text-6xl">
+          <h2 className="mt-8 text-4xl font-bold text-(--text-primary) md:text-6xl">
             Experience the future
             <br />
             of AI conversations
           </h2>
 
-          <p className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-slate-400">
+          <p className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-(--text-secondary)">
             Chat with powerful AI models, upload documents,
             analyze images, use voice interaction,
             and export conversations —
@@ -62,6 +64,7 @@ export default function CTA() {
               className="
                 group
 
+                text-white
                 inline-flex
                 items-center
                 gap-3
@@ -74,7 +77,7 @@ export default function CTA() {
                 py-4
 
                 font-semibold
-                text-white
+                
 
                 transition-all
                 duration-300
@@ -95,24 +98,31 @@ export default function CTA() {
             <Link
               to="/sign-in"
               className="
-                rounded-2xl
+inline-flex
+items-center
+gap-2
 
-                border
-                border-white/10
+rounded-2xl
 
-                bg-white/5
+border
+border-(--border-color)
 
-                px-8
-                py-4
+bg-(--bg-card)
 
-                font-medium
-                text-white
+px-8
+py-4
 
-                transition-all
+text-(--text-primary)
 
-                hover:border-blue-500/30
-                hover:bg-blue-500/10
-              "
+backdrop-blur-xl
+
+transition-all
+duration-300
+
+hover:border-blue-500/40
+hover:bg-blue-500/10
+hover:-translate-y-1
+"
             >
               Login
             </Link>

@@ -47,11 +47,11 @@ export default function Footer() {
 
               <div>
 
-                <h2 className="text-2xl font-bold text-white">
+                <h2 className="text-2xl font-bold text-(--text-primary)">
                   Flux AI
                 </h2>
 
-                <p className="text-sm text-slate-400">
+                <p className="text-sm text-(--text-secondary)">
                   Intelligent AI Workspace
                 </p>
 
@@ -59,7 +59,7 @@ export default function Footer() {
 
             </div>
 
-            <p className="mt-6 max-w-sm leading-7 text-slate-400">
+            <p className="mt-6 max-w-sm leading-7 text-(--text-secondary)">
               A modern AI workspace combining document intelligence,
               voice interaction, image understanding and powerful
               language models into one beautiful experience.
@@ -71,7 +71,7 @@ export default function Footer() {
 
           <div>
 
-            <h3 className="mb-6 text-lg font-semibold text-white">
+            <h3 className="mb-6 text-lg font-semibold text-(--text-primary)">
               Quick Links
             </h3>
 
@@ -79,28 +79,28 @@ export default function Footer() {
 
               <a
                 href="/"
-                className="text-slate-400 transition hover:text-white"
+                className="text-slate-400 transition hover:text-(--text-secondary)"
               >
                 Home
               </a>
 
               <a
                 href="/chat"
-                className="text-slate-400 transition hover:text-white"
+                className="text-slate-400 transition hover:text-(--text-secondary)"
               >
                 Chat
               </a>
 
               <a
                 href="/sign-in"
-                className="text-slate-400 transition hover:text-white"
+                className="text-slate-400 transition hover:text-(--text-secondary)"
               >
                 Login
               </a>
 
               <a
                 href="/sign-up"
-                className="text-slate-400 transition hover:text-white"
+                className="text-slate-400 transition hover:text-(--text-secondary)"
               >
                 Register
               </a>
@@ -113,7 +113,7 @@ export default function Footer() {
 
           <div>
 
-            <h3 className="mb-6 text-lg font-semibold text-white">
+            <h3 className="mb-6 text-lg font-semibold text-(--text-primary)">
               Connect
             </h3>
 
@@ -123,7 +123,7 @@ export default function Footer() {
                 href="https://github.com/yashvskothari"
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-3 text-slate-400 transition hover:text-white"
+                className="flex items-center gap-3 text-slate-400 transition hover:text-(--text-secondary)"
               >
                 <FolderGit2 size={18} />
 
@@ -136,7 +136,7 @@ export default function Footer() {
                 href="https://linkedin.com/in/yashvskothari"
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-3 text-slate-400 transition hover:text-white"
+                className="flex items-center gap-3 text-slate-400 transition hover:text-(--text-secondary)"
               >
                 <Link size={18} />
 
@@ -147,7 +147,7 @@ export default function Footer() {
 
               <a
                 href="mailto:your@email.com"
-                className="flex items-center gap-3 text-slate-400 transition hover:text-white"
+                className="flex items-center gap-3 text-slate-400 transition hover:text-(--text-secondary)"
               >
                 <Mail size={18} />
 

@@ -39,11 +39,11 @@ const Hero = () => {
 
       <div className="absolute inset-0">
 
-        <div className="absolute left-37.5 top-30 h-105 w-105 rounded-full bg-blue-600/20 blur-[120px]" />
+<div className="absolute left-40 top-32 h-96 w-96 rounded-full bg-blue-500/15 blur-[120px]" />
 
-        <div className="absolute right-37.5 bottom-37.5 h-112.5 w-112.5 rounded-full bg-cyan-500/20 blur-[120px]" />
+<div className="absolute right-40 bottom-40 h-[26rem] w-[26rem] rounded-full bg-cyan-500/15 blur-[140px]" />
 
-        <div className="absolute left-1/2 top-1/2 h-70 w-70 -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-600/10 blur-[100px]" />
+<div className="absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-500/10 blur-[120px]" />
 
       </div>
 
@@ -62,7 +62,7 @@ const Hero = () => {
 
       </div>
 
-      <div className="relative mx-auto flex min-h-screen max-w-7xl items-center px-6 py-20 sm:px-10 lg:px-16">
+      <div className="relative mx-auto flex min-h-[92vh] max-w-7xl items-center px-6 py-20 sm:px-10 lg:px-16">
 
         <div className="w-full">
 
@@ -82,11 +82,27 @@ const Hero = () => {
 
           {/* Heading */}
 
-          <h1 className="mx-auto max-w-5xl text-center text-5xl font-extrabold leading-tight text-white sm:text-6xl lg:text-7xl">
+          <h1
+  className="
+    mx-auto
+    max-w-5xl
+
+    text-center
+
+    text-5xl
+    sm:text-6xl
+    lg:text-7xl
+
+    font-extrabold
+    leading-tight
+
+    text-(--text-primary)
+  "
+>
 
             Meet{" "}
 
-            <span className="bg-linear-to-r from-blue-400 via-cyan-400 to-indigo-400 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-blue-800 via-cyan-500 to-indigo-500 bg-clip-text text-transparent">
 
               Flux AI
 
@@ -94,7 +110,7 @@ const Hero = () => {
 
           </h1>
 
-          <p className="mx-auto mt-8 max-w-3xl text-center text-lg leading-8 text-slate-300 sm:text-xl">
+          <p className="mx-auto mt-8 max-w-3xl text-center text-lg leading-8 text-(--text-secondary) sm:text-xl">
 
             An intelligent AI workspace built for conversations, document
             understanding, image analysis, voice interaction, and seamless
@@ -108,7 +124,36 @@ const Hero = () => {
 
             <a
               href="/chat"
-              className="group inline-flex items-center gap-2 rounded-2xl bg-blue-600 px-8 py-4 font-semibold text-white transition-all duration-300 hover:scale-105 hover:bg-blue-700"
+              className="
+group
+
+inline-flex
+items-center
+gap-2
+
+rounded-2xl
+
+bg-linear-to-br
+from-blue-600
+via-indigo-600
+to-cyan-500
+
+px-8
+py-4
+
+font-semibold
+
+text-white
+
+shadow-xl
+shadow-blue-500/25
+
+transition-all
+duration-300
+
+hover:-translate-y-1
+hover:shadow-blue-500/40
+"
             >
               Get Started
 
@@ -123,7 +168,32 @@ const Hero = () => {
               href="https://github.com/yashvskothari"
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-2xl border border-(--border-color) bg-(--bg-card) px-8 py-4 text-white transition-all duration-300 hover:border-blue-500/40 hover:bg-blue-500/10"
+              className="
+inline-flex
+items-center
+gap-2
+
+rounded-2xl
+
+border
+border-(--border-color)
+
+bg-(--bg-card)
+
+px-8
+py-4
+
+text-(--text-primary)
+
+backdrop-blur-xl
+
+transition-all
+duration-300
+
+hover:border-blue-500/40
+hover:bg-blue-500/10
+hover:-translate-y-1
+"
             >
               <FolderGit2 size={18} />
 
@@ -152,20 +222,21 @@ const Hero = () => {
                     rounded-3xl
 
                     border
-                    border-white/10
+                    border-(--border-color)
 
-                    bg-white/5
+                    bg-(--bg-card)
 
                     p-6
-
+                    
                     backdrop-blur-xl
 
                     transition-all
                     duration-500
 
                     hover:-translate-y-2
+                    hover:scale-[1.03]
                     hover:border-blue-500/40
-                    hover:bg-white/10
+                    hover:bg-blue-500/5
                     hover:shadow-2xl
                     hover:shadow-blue-500/20
                   "
@@ -208,21 +279,19 @@ const Hero = () => {
                         bg-linear-to-br
                         from-blue-600
                         to-cyan-500
-
-                        text-white
-
                         shadow-lg
                         shadow-blue-500/20
+                        text-white
                       "
                     >
                       <Icon size={26} />
                     </div>
 
-                    <h3 className="text-lg font-semibold text-white">
+                    <h3 className="text-lg font-semibold text-(--text-primary)">
                       {feature.title}
                     </h3>
 
-                    <p className="mt-3 text-sm leading-7 text-slate-300">
+                    <p className="mt-3 text-sm leading-7 text-(--text-secondary)">
                       {feature.desc}
                     </p>
 
@@ -238,35 +307,35 @@ const Hero = () => {
           <div className="mt-20 flex flex-wrap items-center justify-center gap-10">
 
             <div className="text-center">
-              <h3 className="text-3xl font-bold text-white">4+</h3>
-              <p className="mt-2 text-sm text-slate-400">
+              <h3 className="text-3xl font-bold text-(--text-primary)">4+</h3>
+              <p className="mt-2 text-sm text-(--text-secondary)">
                 AI Features
               </p>
             </div>
 
-            <div className="hidden h-10 w-px bg-white/10 md:block" />
+            <div className="hidden h-10 w-px bg-(--border-color) md:block" />
 
             <div className="text-center">
-              <h3 className="text-3xl font-bold text-white">100%</h3>
-              <p className="mt-2 text-sm text-slate-400">
+              <h3 className="text-3xl font-bold text-(--text-primary)">100%</h3>
+              <p className="mt-2 text-sm text-(--text-secondary)">
                 Responsive
               </p>
             </div>
 
-            <div className="hidden h-10 w-px bg-white/10 md:block" />
+            <div className="hidden h-10 w-px bg-(--border-color) md:block" />
 
             <div className="text-center">
-              <h3 className="text-3xl font-bold text-white">FastAPI</h3>
-              <p className="mt-2 text-sm text-slate-400">
+              <h3 className="text-3xl font-bold text-(--text-primary)">FastAPI</h3>
+              <p className="mt-2 text-sm text-(--text-secondary)">
                 Backend
               </p>
             </div>
 
-            <div className="hidden h-10 w-px bg-white/10 md:block" />
+            <div className="hidden h-10 w-px bg-(--border-color) md:block" />
 
             <div className="text-center">
-              <h3 className="text-3xl font-bold text-white">React</h3>
-              <p className="mt-2 text-sm text-slate-400">
+              <h3 className="text-3xl font-bold text-(--text-primary)">React</h3>
+              <p className="mt-2 text-sm text-(--text-secondary)">
                 Frontend
               </p>
             </div>

@@ -58,12 +58,12 @@ export default function Features() {
             Features
           </span>
 
-          <h2 className="mt-6 text-4xl font-bold text-white md:text-5xl">
+          <h2 className="mt-6 text-4xl font-bold text-(--text-primary) md:text-5xl">
             Everything you need in
             <span className="text-blue-400"> one AI workspace</span>
           </h2>
 
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-400">
+          <p className="mx-auto mt-6 max-w-2xl text-lg text-(--text-secondary)">
             Flux AI combines modern AI capabilities with a beautiful interface,
             making conversations faster, smarter and more productive.
           </p>
@@ -83,11 +83,10 @@ export default function Features() {
 
                   rounded-3xl
 
-                  border
-                  border-white/10
+                    border
+                    border-(--border-color)
 
-                  bg-white/5
-
+                    bg-(--bg-card)
                   p-8
 
                   backdrop-blur-xl
@@ -95,10 +94,14 @@ export default function Features() {
                   transition-all
                   duration-500
 
-                  hover:-translate-y-2
-                  hover:border-blue-500/30
-                  hover:shadow-xl
-                  hover:shadow-blue-500/10
+
+
+                    hover:-translate-y-2
+                    hover:scale-[1.03]
+                    hover:border-blue-500/40
+                    hover:bg-blue-500/5
+                    hover:shadow-2xl
+                    hover:shadow-blue-500/20
                 "
               >
                 <div
@@ -124,11 +127,11 @@ export default function Features() {
                   <Icon size={26} />
                 </div>
 
-                <h3 className="text-xl font-semibold text-white">
+                <h3 className="text-xl font-semibold text-(--text-primary)">
                   {feature.title}
                 </h3>
 
-                <p className="mt-4 leading-7 text-slate-400">
+                <p className="mt-4 leading-7 text-(--text-secondary)">
                   {feature.description}
                 </p>
 
@@ -137,6 +140,7 @@ export default function Features() {
           })}
 
         </div>
+        
 
       </div>
 
